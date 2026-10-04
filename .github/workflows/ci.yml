@@ -28,7 +28,7 @@ jobs:
       - run: cmake --preset core-debug
       - run: cmake --build --preset core-debug --parallel 2
       - run: ctest --preset core-debug --no-tests=error --output-junit core-tests.xml
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: core-sanitizer-tests
@@ -85,7 +85,7 @@ jobs:
           "$installed" --window-smoke-test
           "$(dirname "$installed")/aytool" render "$GITHUB_WORKSPACE/tests/fixtures/integration.pt3" package-export.wav
           cmp package-export.wav "$GITHUB_WORKSPACE/build/integration-reference.wav"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: desktop-checks
