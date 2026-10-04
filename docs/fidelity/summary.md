@@ -30,4 +30,4 @@
 | header-v6-table3 | 48000 Hz / 16-bit / 2 ch | 40,324 (0.8400833) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
 | header-v7-table1 | 48000 Hz / 16-bit / 2 ch | 40,324 (0.8400833) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
 
-Measured 2026-10-04T03:22:45.383413+00:00 against source revision `4dc0dbda530da4af9ac4c6593b0defbfa7673267`; renderer SHA-256 `a3c3726c1acef1378343380969e76239cb564364c7cc22e28e4c689092e53eb9`.
+Measured 2026-10-04T04:15:01.509350+00:00 against source revision `a43c485766d237fa4891d0c07f74f27506804ed2`; renderer SHA-256 `8d6207f4c4933931725473351139946a8e3b6719d95e22f51dad801402e41d75`.

@@ -121,4 +121,4 @@ See [criteria, provenance and artifacts](FIDELITY.md). For an installed renderer
 pass `--build-dir build` to record the original Release compiler/Qt/flags and
 assert that the installed executable matches that build. A public-only pass
 is separate from the required private gate. CI runs the public gate and preserves
-its reports; GitHub execution has not occurred yet.
+its reports; [actual GitHub runs](https://github.com/itamarcps/CppAy/actions/workflows/ci.yml) show the remote result.

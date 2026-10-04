@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0 — 2026-10-04
+
+- Publish the first focused release at `itamarcps/CppAy`, with Linux x86-64,
+  Windows x64, source and redistributable audio-evidence downloads.
+- Set application, CLI, Windows resource and package versions to `0.1.0`.
+- Rebuild both platforms and refresh packaged-renderer evidence: all 27 cases
+  are bit-exact; native tests pass 12/12 and Windows checks pass under Wine.
+- Add real release download links and SHA-256 checksums.
+
+
 ## 0.1.0-rc.1 — 2026-10-04 (local candidate)
 
 - Preserve the C++Ay retro interface, branding, compact native-import playlist,

@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "measurement_utc": "2026-10-04T03:22:45.383413+00:00",
+  "measurement_utc": "2026-10-04T04:15:01.509350+00:00",
   "candidate": {
-    "renderer_sha256": "a3c3726c1acef1378343380969e76239cb564364c7cc22e28e4c689092e53eb9",
-    "renderer_version": "C++Ay 0.1.0-rc.1",
-    "source_revision": "4dc0dbda530da4af9ac4c6593b0defbfa7673267",
-    "working_tree_diff_sha256": "a08821cd49445771790d8af501daef64d5e24b1da36810f5c6cbedc49e018e32",
+    "renderer_sha256": "8d6207f4c4933931725473351139946a8e3b6719d95e22f51dad801402e41d75",
+    "renderer_version": "C++Ay 0.1.0",
+    "source_revision": "a43c485766d237fa4891d0c07f74f27506804ed2",
+    "working_tree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "build_configuration": "Release; shared production aycore",
-    "cmake_cache_sha256": "ddee293fa1529f5820b48dc4c680f7ed9da57ef3f2138908007a6ddc4b96a6ae",
+    "cmake_cache_sha256": "06a7592b60b2d6eb8bc78b10476328365d0eb688f53cf63de5b47acbc23f8769",
     "CMAKE_BUILD_TYPE:STRING": "Release",
     "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
     "compiler_version": "c++ (GCC) 16.2.1 20260810",
     "qt_version": "6.11.2"
   },
-  "candidate_inputs_sha256": "4784909b0a865741470a7e9ab13473062b0325a6996a0e5aeaca83dc88f7ba2d",
+  "candidate_inputs_sha256": "e3c0ecadfc2636e89af0e56b5e298cf358734e7dd8fd56677822574e50fb8c79",
   "required_gate": {
     "status": "BIT_EXACT_PCM",
     "redistribution": "PRIVATE"
@@ -23230,7 +23230,7 @@
         "input_provenance": "original synthetic effects-portamento with declared header mutation"
       },
       "input": {
-        "path": "build-release-candidate/candidate-evidence/header-v3-table0.pt3",
+        "path": "build-release-0.1.0/qualified-evidence/header-v3-table0.pt3",
         "sha256": "4c0070f918358970ac09a1ff5507c954a89948c62d5eeba9d0222f0f5f441687",
         "size": 282
       }
@@ -23506,7 +23506,7 @@
         "input_provenance": "original synthetic effects-portamento with declared header mutation"
       },
       "input": {
-        "path": "build-release-candidate/candidate-evidence/header-v3-table2.pt3",
+        "path": "build-release-0.1.0/qualified-evidence/header-v3-table2.pt3",
         "sha256": "9c623e968bd5c84269a4046944d0f03cd0e063116262006982878b4cd6a6ad84",
         "size": 282
       }
@@ -23782,7 +23782,7 @@
         "input_provenance": "original synthetic effects-portamento with declared header mutation"
       },
       "input": {
-        "path": "build-release-candidate/candidate-evidence/header-v5-table0.pt3",
+        "path": "build-release-0.1.0/qualified-evidence/header-v5-table0.pt3",
         "sha256": "c8155cdbbb4fcf36f20c2321c09bfc9f763a8d72d74837da10a3771802b8b830",
         "size": 282
       }
@@ -24058,7 +24058,7 @@
         "input_provenance": "original synthetic effects-portamento with declared header mutation"
       },
       "input": {
-        "path": "build-release-candidate/candidate-evidence/header-v6-table3.pt3",
+        "path": "build-release-0.1.0/qualified-evidence/header-v6-table3.pt3",
         "sha256": "38818a61d3b1b7df52356a2a607c1fcd598a789484a83c677c23cc153a8e67d1",
         "size": 282
       }
@@ -24334,7 +24334,7 @@
         "input_provenance": "original synthetic effects-portamento with declared header mutation"
       },
       "input": {
-        "path": "build-release-candidate/candidate-evidence/header-v7-table1.pt3",
+        "path": "build-release-0.1.0/qualified-evidence/header-v7-table1.pt3",
         "sha256": "da3b1c9ee75b7f9fefb771292a0e0c3bbbb6241fa5696eabdd98716ca20d007f",
         "size": 282
       }

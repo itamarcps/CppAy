@@ -33,7 +33,7 @@ player to native streaming playback, compact playlists and independent channel s
 Complete AY_Emul application parity is **unfinished**. CPU-backed AY/AYM, SNDH,
 other tracker families, structural music finder, subsong UI, AYL/PLS/CUE and tray
 integration remain required work in the [coverage record](IMPLEMENTATION.md).
-This candidate does not implement or certify them. Python and Pascal are
+This release does not implement or certify them. Python and Pascal are
 verification tools, not playback dependencies.
 
 ## Measured audio fidelity
@@ -86,9 +86,17 @@ python3 tools/serve_evidence.py --directory docs/fidelity/listening
 
 ## Install or build
 
-**0.1.0-rc.1 is prepared locally; no public download has been published.**
-Candidate artifacts and checksums are described in the
-[release notes](docs/RELEASE_NOTES.md). Linux is the primary target.
+**[Download C++Ay 0.1.0](https://github.com/itamarcps/CppAy/releases/tag/v0.1.0).** Linux is the primary target.
+
+| Download | Installation |
+| --- | --- |
+| [Windows x64 ZIP](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-windows-x64.zip) | Extract the whole ZIP and run `C++Ay.exe`. |
+| [Linux x86-64 archive](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-linux-x86_64.tar.gz) | Requires the compatible CachyOS/Arch system runtime described below. |
+| [Source archive](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-source.tar.gz) | Build with Qt 6.8+ using the instructions below. |
+| [Public audio evidence](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-public-evidence.tar.gz) | Self-contained reports, lossless A/B audio and measured plots. |
+| [SHA-256 checksums](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/SHA256SUMS) | Run `sha256sum -c SHA256SUMS` beside the downloaded archives. |
+
+See the [release notes](docs/RELEASE_NOTES.md) for verified scope and limitations.
 
 The Linux x86-64 `.tar.gz` is a dynamically linked **system-Qt** package.
 Extract it and run `bin/C++Ay`; install compatible runtime packages listed in
@@ -96,7 +104,7 @@ its `INSTALL.txt` / `PACKAGE.json`. The prepared binary targets the tested
 CachyOS/Arch runtime (Qt 6.11.2, matching GCC/glibc), not arbitrary Linux
 installations. Building from source is the appropriate route on other systems.
 
-Windows: extract the **whole** `C++Ay-0.1.0-rc.1-windows-x64.zip` and run
+Windows: extract the **whole** `C++Ay-0.1.0-windows-x64.zip` and run
 `C++Ay.exe`, keeping DLLs/QML/plugins beside it. Qt/MinGW runtimes and notices
 are included. MinGW binaries are verified under Wine; physical Windows 11 x64
 hardware remains untested. No macOS qualification is claimed.
@@ -122,7 +130,7 @@ ctest --preset linux-release --no-tests=error
 For other distributions, install their corresponding Qt development packages;
 [build details](docs/BUILDING.md) include non-system Qt, core-only builds,
 installation and pinned Windows cross-compilation. CI declares Ubuntu 24.04
-with an official Qt SDK; the workflow has not yet run on GitHub.
+with an official Qt SDK; see the [actual build results](https://github.com/itamarcps/CppAy/actions/workflows/ci.yml).
 
 ## First use
 
@@ -195,14 +203,14 @@ playback volume is separate from canonical export/comparison PCM.
 
 ## Status and credits
 
-The focused candidate's verified formats are listed above; full original scope
+The focused release's verified formats are listed above; full original scope
 is still open. Linux tests ran on CachyOS/KDE Wayland with an available audio
 output. Wine is a compatibility test, not physical Windows validation. Broader
 DPI/accessibility, hardware/device and real-world format coverage remain limited.
 
-Report issues with the candidate version, OS/Qt/audio backend, format/profile,
+Report issues with the application version, OS/Qt/audio backend, format/profile,
 reproduction steps and logs. Attach music only when you have permission to share
-it. There is no public issue tracker until a repository destination is established.
+it. [Open an issue](https://github.com/itamarcps/CppAy/issues).
 [Release notes and handoff](docs/RELEASE_NOTES.md) ·
 [publication instructions](docs/RELEASING.md) · [contributing](CONTRIBUTING.md).
 

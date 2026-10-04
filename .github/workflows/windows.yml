@@ -25,7 +25,7 @@ jobs:
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Matching Linux Qt host tools
         run: |
-          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools qtsvg
+          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools
           echo "QT_HOST_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64" >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
           echo "$RUNNER_TEMP/Qt/6.11.2/gcc_64/bin" >> "$GITHUB_PATH"

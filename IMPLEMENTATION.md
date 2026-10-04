@@ -87,3 +87,12 @@ do not certify the sound server, device, DAC or browser.
 
 Final executed results, artifact identities and outstanding gates are retained
 in [release notes](docs/RELEASE_NOTES.md) and [fidelity](docs/FIDELITY.md).
+
+## Public release checkpoint — 0.1.0 (2026-10-04)
+
+Application version promoted to 0.1.0 at `a43c485`; Linux and MinGW packages
+rebuilt, native tests 12/12 passed, installed renderer 27/27 BIT_EXACT_PCM,
+installed Linux GUI export bit-exact to the original complete reference, and
+Windows verification passed under Wine. Public destination: `itamarcps/CppAy`.
+README download links, regenerated evidence and release checksums accompany
+this focused release. The required functionality gaps above remain open.

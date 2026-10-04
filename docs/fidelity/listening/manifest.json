@@ -12,12 +12,12 @@
     "riff_oversize_bytes": 0
   },
   "candidate_identity": {
-    "renderer_sha256": "a3c3726c1acef1378343380969e76239cb564364c7cc22e28e4c689092e53eb9",
-    "renderer_version": "C++Ay 0.1.0-rc.1",
-    "source_revision": "4dc0dbda530da4af9ac4c6593b0defbfa7673267",
-    "working_tree_diff_sha256": "a08821cd49445771790d8af501daef64d5e24b1da36810f5c6cbedc49e018e32",
+    "renderer_sha256": "8d6207f4c4933931725473351139946a8e3b6719d95e22f51dad801402e41d75",
+    "renderer_version": "C++Ay 0.1.0",
+    "source_revision": "a43c485766d237fa4891d0c07f74f27506804ed2",
+    "working_tree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "build_configuration": "Release; shared production aycore",
-    "cmake_cache_sha256": "ddee293fa1529f5820b48dc4c680f7ed9da57ef3f2138908007a6ddc4b96a6ae",
+    "cmake_cache_sha256": "06a7592b60b2d6eb8bc78b10476328365d0eb688f53cf63de5b47acbc23f8769",
     "CMAKE_BUILD_TYPE:STRING": "Release",
     "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
     "compiler_version": "c++ (GCC) 16.2.1 20260810",
