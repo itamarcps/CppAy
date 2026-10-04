@@ -1,0 +1,95 @@
+--- oracle.pas
++++ oracle-observed.pas
+@@ -170,6 +170,12 @@
+  PrevLeft,PrevRight,LevelL,LevelR,Left_Chan,Right_Chan,Left_Chan1,Right_Chan1:integer;
+ type
+  TS16=packed array[0..0]of record Left,Right:smallint;end;PS16=^TS16;
++var trace:Text;TraceEnabled:Boolean=False;SourceTick,Ordinal:integer;
++procedure Observe(reg,value:integer;chip:integer=0);
++begin
++ if not TraceEnabled then Exit;
++ WriteLn(trace,'{"tick":',Int64(SourceTick)*round(AY_Freq/InterruptHz/8),',"ordinal":',Ordinal,',"chip":',chip,',"register":',reg,',"value":',value and 255,'}');Inc(Ordinal);
++end;
+ procedure Atari_MixDMASnd(var L,R:integer);begin end;
+ procedure FillVis;begin end;
+ procedure RaiseBadFileStructure;begin raise Exception.Create('Bad structure');end;
+@@ -448,6 +454,7 @@
+ 
+ procedure TSoundChip.SetMixerRegister(Value:byte);
+ begin
++Observe(7,Value,Ord(@Self=@SoundChip[1]));
+ RegisterAY.Mixer := Value;
+ Ton_EnA := (Value and 1) = 0;
+ Noise_EnA := (Value and 8) = 0;
+@@ -459,6 +466,7 @@
+ 
+ procedure TSoundChip.SetEnvelopeRegister(Value:byte);
+ begin
++Observe(13,Value,Ord(@Self=@SoundChip[1]));
+ Envelope_Counter.Hi := 0;
+ First_Period := True;
+ if (Value and 4) = 0 then
+@@ -480,18 +488,21 @@
+ 
+ procedure TSoundChip.SetAmplA(Value:byte);
+ begin
++Observe(8,Value,Ord(@Self=@SoundChip[1]));
+ RegisterAY.AmplitudeA := Value;
+ Envelope_EnA := (Value and 16) = 0;
+ end;
+ 
+ procedure TSoundChip.SetAmplB(Value:byte);
+ begin
++Observe(9,Value,Ord(@Self=@SoundChip[1]));
+ RegisterAY.AmplitudeB := Value;
+ Envelope_EnB := (Value and 16) = 0;
+ end;
+ 
+ procedure TSoundChip.SetAmplC(Value:byte);
+ begin
++Observe(10,Value,Ord(@Self=@SoundChip[1]));
+ RegisterAY.AmplitudeC := Value;
+ Envelope_EnC := (Value and 16) = 0;
+ end;
+@@ -1244,16 +1255,21 @@
+    SoundChip[CNum].SetMixerRegister(TempMixer);
+ 
+    SoundChip[CNum].RegisterAY.TonA := PlParams[CNum].PT3_A.Ton;
++   Observe(0,SoundChip[CNum].RegisterAY.TonA,CNum);Observe(1,SoundChip[CNum].RegisterAY.TonA shr 8,CNum);
+    SoundChip[CNum].RegisterAY.TonB := PlParams[CNum].PT3_B.Ton;
++   Observe(2,SoundChip[CNum].RegisterAY.TonB,CNum);Observe(3,SoundChip[CNum].RegisterAY.TonB shr 8,CNum);
+    SoundChip[CNum].RegisterAY.TonC := PlParams[CNum].PT3_C.Ton;
++   Observe(4,SoundChip[CNum].RegisterAY.TonC,CNum);Observe(5,SoundChip[CNum].RegisterAY.TonC shr 8,CNum);
+ 
+    SoundChip[CNum].SetAmplA(PlParams[CNum].PT3_A.Amplitude);
+    SoundChip[CNum].SetAmplB(PlParams[CNum].PT3_B.Amplitude);
+    SoundChip[CNum].SetAmplC(PlParams[CNum].PT3_C.Amplitude);
+ 
+    SoundChip[CNum].RegisterAY.Noise := (Noise_Base + AddToNoise) and 31;
++   Observe(6,SoundChip[CNum].RegisterAY.Noise,CNum);
+ 
+    SoundChip[CNum].RegisterAY.Envelope := Env_Base.wrd + AddToEnv + Cur_Env_Slide;
++   Observe(11,SoundChip[CNum].RegisterAY.Envelope,CNum);Observe(12,SoundChip[CNum].RegisterAY.Envelope shr 8,CNum);
+ 
+    if Cur_Env_Delay > 0 then
+     begin
+@@ -1758,7 +1774,7 @@
+ end;end;
+ var module:ModTypes;input,output:file;Tm,Lp,i,size:integer;buf:pointer;
+ begin
+- if ParamCount<>2 then Halt(2);
++ if ParamCount<>3 then Halt(2);
+  SampleRate:=StrToIntDef(GetEnvironmentVariable('ORACLE_RATE'),48000);AY_Freq:=StrToIntDef(GetEnvironmentVariable('ORACLE_CLOCK'),1773400);PreAmp:=StrToIntDef(GetEnvironmentVariable('ORACLE_PREAMP'),127);InterruptHz:=StrToFloatDef(GetEnvironmentVariable('ORACLE_INTERRUPT'),50);
+  if GetEnvironmentVariable('ORACLE_AY')='1' then ChType:=AY_Chip;
+  FillChar(module,SizeOf(module),0);AssignFile(input,ParamStr(1));Reset(input,1);size:=FileSize(input);if size>65536 then Halt(3);BlockRead(input,module,size);CloseFile(input);
+@@ -1769,7 +1785,9 @@
+  Calculate_Level_Tables;if (GetEnvironmentVariable('ORACLE_NO_FILTER')='1') or (SampleRate>=AY_Freq div 8) then begin IsFilt:=-1;Filt_M:=0;end else CalcFiltKoefs;SetLength(Filt_XL,Filt_M+1);SetLength(Filt_XR,Filt_M+1);Filt_I:=0;
+  Delay_In_Tiks:=round(8192/SampleRate*AY_Freq);Tik.Re:=Delay_In_Tiks;
+  BufferLength:=round(Tm*SampleRate/InterruptHz)+1000;GetMem(buf,BufferLength*4);BuffLen:=0;
+- for i:=0 to Tm-1 do begin PT3_Get_Registers(0);if TSMode then PT3_Get_Registers(1);Number_Of_Tiks.hi:=round(AY_Freq/InterruptHz/8);Synthesizer_Stereo16(buf);end;
++ AssignFile(trace,ParamStr(3));Rewrite(trace);TraceEnabled:=True;
++ for i:=0 to Tm-1 do begin SourceTick:=i;Ordinal:=0; PT3_Get_Registers(0);if TSMode then PT3_Get_Registers(1);Number_Of_Tiks.hi:=round(AY_Freq/InterruptHz/8);Synthesizer_Stereo16(buf);end;
++ CloseFile(trace);
+  AssignFile(output,ParamStr(2));Rewrite(output,1);BlockWrite(output,buf^,BuffLen*4);CloseFile(output);FreeMem(buf);
+  WriteLn(Tm,' interrupts, ',BuffLen,' frames');
+ end.

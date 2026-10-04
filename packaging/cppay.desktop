@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=C++Ay
+Comment=Native AY/YM chiptune player
+Exec=C++Ay %F
+Icon=cppay
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+MimeType=audio/x-pt3;audio/x-psg;audio/x-ym3;

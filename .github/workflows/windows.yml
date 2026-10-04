@@ -1,0 +1,38 @@
+name: Windows x64 package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mingw:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      AYPLAYER_BUILD_JOBS: 2
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Cross-build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build curl p7zip-full zstd libgmp10 libmpfr6 libmpc3 libisl23 libgl1-mesa-dev libxkbcommon-dev libxcb-cursor0 libpulse0 libasound2t64
+          python3 -m venv .venv
+          .venv/bin/python -m pip install aqtinstall==3.3.0
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+      - name: Matching Linux Qt host tools
+        run: |
+          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools qtsvg
+          echo "QT_HOST_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/Qt/6.11.2/gcc_64/bin" >> "$GITHUB_PATH"
+      - run: ./tools/build_windows.sh
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: CppAy-windows-x64
+          path: build-windows/C++Ay-windows-x64.zip
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,81 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-sanitizers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build python3-numpy
+      - run: cmake --preset core-debug
+      - run: cmake --build --preset core-debug --parallel 2
+      - run: ctest --preset core-debug --output-junit core-tests.xml
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        if: always()
+        with:
+          name: core-sanitizer-tests
+          path: core-tests.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+  desktop:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      QT_QPA_PLATFORM: offscreen
+      QT_QUICK_BACKEND: software
+      XDG_CONFIG_HOME: ${{ github.workspace }}/build/ci-config
+      XDG_DATA_HOME: ${{ github.workspace }}/build/ci-data
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgl1-mesa-dev libxkbcommon-dev libxcb-cursor0 libpulse0 libasound2t64
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r requirements-dev.txt aqtinstall==3.3.0
+          echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
+      - name: Qt 6.11.2
+        run: |
+          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools qtsvg
+          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
+      - run: cmake --preset linux-release
+      - run: cmake --build --preset linux-release --parallel 2
+      - run: ctest --preset linux-release --output-junit desktop-tests.xml
+      - name: Three/six-channel layouts
+        run: |
+          mkdir -p build/ci-review
+          cd build/ci-review
+          ../C++Ay --layout-smoke-test ../../tests/fixtures/integration.pt3 ../../tests/fixtures/native-ts.pt3
+      - name: Check install tree
+        run: cmake --install build --prefix "$GITHUB_WORKSPACE/build/install"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        if: always()
+        with:
+          name: desktop-checks
+          path: |
+            desktop-tests.xml
+            build/ci-review/evidence/
+          if-no-files-found: ignore
+          retention-days: 14

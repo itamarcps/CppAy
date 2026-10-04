@@ -1,0 +1,27 @@
+Runtime notices and source versions
+
+Qt 6.11.2 modules: qtbase, qtdeclarative, qtmultimedia, qtshadertools, qtsvg.
+Official source: https://download.qt.io/archive/qt/6.11/6.11.2/submodules/
+SDK bill of materials and upstream notices: qt-sbom/.
+Qt license texts and third-party license texts: qt/.
+
+FFmpeg 7.1.5 binaries supplied by the official Qt SDK (LGPL build).
+Source: https://ffmpeg.org/releases/ffmpeg-7.1.5.tar.xz
+License: LGPL-2.1-or-later, with additional notices in the multimedia SBOM.
+These DLLs are replaceable; Qt dependencies are dynamically linked.
+
+MinGW GCC 13.1 libgcc and libstdc++: GPL version 3 or later with the GCC
+Runtime Library Exception 3.1. See mingw/GPL-3.0.txt and
+mingw/RUNTIME.LIBRARY.EXCEPTION.
+Source: https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/
+MinGW-w64 runtime 11.0.0: see mingw/COPYING.MinGW-w64*.txt.
+Source: https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
+
+Qt SDK supplementary runtime archives d3dcompiler_47 and opengl32sw
+are distributed unchanged; SDK archive provenance is recorded in the
+project packaging/windows/dependencies.lock.json.
+The Mesa software OpenGL library has upstream permissive licensing:
+https://docs.mesa3d.org/license.html
+
+C++Ay's Bulba/Hacker KAY attributions: ../THIRD_PARTY.md.
+Samples and reference source archives are not included in this package.

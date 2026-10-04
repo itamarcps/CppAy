@@ -1,0 +1,63 @@
+# Local builds, SDKs, downloaded archives and deployment packages.
+/build*/
+/.deps/
+/.venv/
+/CMakeUserPresets.json
+/CMakeFiles/
+/CMakeCache.txt
+/Testing/
+/install_manifest.txt
+/compile_commands.json
+/core-tests.xml
+/desktop-tests.xml
+__pycache__/
+*.py[cod]
+*.log
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dll
+*.exe
+*.zip
+*.7z
+*.rar
+*.tar.*
+
+# User-provided music is private; the public suite uses synthetic fixtures.
+/samples/*
+!/samples/README.md
+
+# Generated evidence may contain private paths, titles and audio.
+/evidence/
+
+# Historical prompts and unreviewed third-party source collections stay local.
+/AY_PLAYER_CODEX_IMPLEMENTATION_PROMPT.txt
+/docs/*
+!/docs/TESTING.md
+!/docs/BUILDING.md
+!/docs/RELEASING.md
+!/docs/MEMORY.md
+!/docs/images/
+/docs/images/*
+!/docs/images/player.png
+/reference/*
+!/reference/README.md
+!/reference/AY_EMUL_NOTICE.txt
+!/reference/oracle/
+/reference/oracle/*
+!/reference/oracle/*.pas
+!/reference/oracle/provenance.json
+!/reference/oracle/observer.patch
+
+# Editor and OS state.
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.env
+.env.*

@@ -1,0 +1,9 @@
+{
+  "kind": "diagnostic minimal source adapter",
+  "source_files": {
+    "docs/Ay_Emul/AY.pas": "c8dae00dae082f7557d48d7a32773d6ffd17ca336ecac6acc32d5c498c446456",
+    "docs/Ay_Emul/Players.pas": "7397e55f76f1c2141044548b618359e9c73fcb07d852c02b950651c6a5fa7546",
+    "docs/Ay_Emul/MainWin.pas": "1fe988138730b49f3a462c7a0421c30689dcda52f02caa01605e79fd9ab28c9e"
+  },
+  "changes": "Selected native PT3 routines copied verbatim. GUI/CPU/visualizer hooks stubbed only where inactive; source CalcFiltKoefs caption statements removed. Initialization and raw output in adapter. No original source modified. Not the unknown original AY_Emul executable."
+}

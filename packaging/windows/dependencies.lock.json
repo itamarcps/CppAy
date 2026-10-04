@@ -1,0 +1,86 @@
+[
+  {
+    "url": "https://archlinux.cachyos.org/repo/extra/os/x86_64/mingw-w64-binutils-2.47-1-x86_64.pkg.tar.zst",
+    "sha256": "a174f1b5894674b039d356878198e146053fa9527b282d6fac3acb46309b117d",
+    "filename": "mingw-w64-binutils-2.47-1-x86_64.pkg.tar.zst",
+    "kind": "arch"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.addons.qtmultimedia.win64_mingw/6.11.2-0-202608131017qtmultimedia-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "2cba6a2c69169840c8c950f720b2efd409402e92942e67b340d26ceabf051165",
+    "filename": "6.11.2-0-202608131017qtmultimedia-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.addons.qtshadertools.win64_mingw/6.11.2-0-202608131017qtshadertools-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "08e5e9cbe66eb28503a85be6722cf0526241f187663ea1528982909672121eb7",
+    "filename": "6.11.2-0-202608131017qtshadertools-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017qtbase-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "8bbd42aa6b7dbb3ac9c88762bbf6f974e29348054186ef5cb920b105c786d81d",
+    "filename": "6.11.2-0-202608131017qtbase-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017qtsvg-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "ef549555ca64d160a32ea2f794ceb7d05d323a70896e7c55410c0aed24b7ba05",
+    "filename": "6.11.2-0-202608131017qtsvg-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017qtdeclarative-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "4dbcc61542dabaa4c391d05e0a641feb33ca0678ceeb809541942466f7e8b881",
+    "filename": "6.11.2-0-202608131017qtdeclarative-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017qttranslations-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "sha256": "14a4b0f0be1aaf9925de2582ff8f0a043cc4d7bb77bb92ab521df6ad5ce3a00a",
+    "filename": "6.11.2-0-202608131017qttranslations-Windows-Windows_11_24H2-Mingw-Windows-Windows_11_24H2-X86_64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017MinGW-w64-x86_64-13.1.0-release-posix-seh-msvcrt-rt_v11-rev1-runtime.7z",
+    "sha256": "59bc6ce1e1365373617898c745f42ebf87f0714c5d02311a35726936f369e1b4",
+    "filename": "6.11.2-0-202608131017MinGW-w64-x86_64-13.1.0-release-posix-seh-msvcrt-rt_v11-rev1-runtime.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017d3dcompiler_47-x64.7z",
+    "sha256": "923370337b19b1826aaf3be762cc7c4e074f26102cf326ecf7195cb260427ba6",
+    "filename": "6.11.2-0-202608131017d3dcompiler_47-x64.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_6112/qt6_6112_mingw/qt.qt6.6112.win64_mingw/6.11.2-0-202608131017opengl32sw-64-mesa_11_2_2-signed_sha256.7z",
+    "sha256": "aa02396e0b29635c64b92ebe72d2b64d80ca866ad14adffeeb380f30f725f298",
+    "filename": "6.11.2-0-202608131017opengl32sw-64-mesa_11_2_2-signed_sha256.7z",
+    "kind": "qt"
+  },
+  {
+    "url": "https://archive.archlinux.org/packages/m/mingw-w64-gcc/mingw-w64-gcc-13.1.0-1-x86_64.pkg.tar.zst",
+    "sha256": "4d19c89b0b3223d1f61e3ebc02b15b67b51ce693f03348e9bd39b13b3e1ad120",
+    "filename": "mingw-w64-gcc-13.1.0-1-x86_64.pkg.tar.zst",
+    "kind": "arch"
+  },
+  {
+    "url": "https://archive.archlinux.org/packages/m/mingw-w64-crt/mingw-w64-crt-11.0.0-1-any.pkg.tar.zst",
+    "sha256": "59504730b15ecd20fb0f8f7df7f17da358856da41e95fcab80b8ada1127dd435",
+    "filename": "mingw-w64-crt-11.0.0-1-any.pkg.tar.zst",
+    "kind": "arch"
+  },
+  {
+    "url": "https://archive.archlinux.org/packages/m/mingw-w64-headers/mingw-w64-headers-11.0.0-1-any.pkg.tar.zst",
+    "sha256": "0534cc2a9837169d01e72bab2df0d71c252cdb6e048e89c96b4767b2ae5c8588",
+    "filename": "mingw-w64-headers-11.0.0-1-any.pkg.tar.zst",
+    "kind": "arch"
+  },
+  {
+    "url": "https://archive.archlinux.org/packages/m/mingw-w64-winpthreads/mingw-w64-winpthreads-11.0.0-1-any.pkg.tar.zst",
+    "sha256": "483d57673b6265f19f53166d0a93f223d0157ce4b1e2bddc737459a9565b232d",
+    "filename": "mingw-w64-winpthreads-11.0.0-1-any.pkg.tar.zst",
+    "kind": "arch"
+  }
+]

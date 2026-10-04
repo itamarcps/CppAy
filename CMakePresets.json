@@ -1,0 +1,63 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "linux-release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "core-debug",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-core",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "AYPLAYER_GUI": "OFF",
+        "AYPLAYER_SANITIZERS": "ON"
+      }
+    },
+    {
+      "name": "windows-mingw64",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-windows",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/mingw64.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_TESTING": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "core-debug",
+      "configurePreset": "core-debug"
+    },
+    {
+      "name": "windows-mingw64",
+      "configurePreset": "windows-mingw64"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "core-debug",
+      "configurePreset": "core-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

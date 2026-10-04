@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a playback, export, UI or build problem.
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Include what you expected and steps to reproduce.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: System and build
+      description: OS, architecture, Qt version, audio device and build method.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots or reproduction file
+      description: Attach only music and other files you have permission to share. Remove personal paths from logs.

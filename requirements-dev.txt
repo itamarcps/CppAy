@@ -1,0 +1,2 @@
+# Python is needed only for development and regression checks.
+numpy>=1.26,<3
