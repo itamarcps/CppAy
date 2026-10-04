@@ -119,6 +119,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--renderer',type=pathlib.Path,required=True)
     p.add_argument('--output',type=pathlib.Path,required=True)
+    p.add_argument('--build-dir',type=pathlib.Path,help='Release build identity when testing an installed renderer')
     p.add_argument('--private',action='store_true',help='Required full release gate: fail if supplied pair missing')
     p.add_argument('--oracle',type=pathlib.Path,help='Qualified Pascal adapter; also requires adjacent oracle-observed')
     args=p.parse_args();out=args.output.resolve();renderer=args.renderer.resolve()
@@ -139,8 +140,13 @@ def main():
         'source_revision':revision,
         'working_tree_diff_sha256':patch,
         'build_configuration':'Release; shared production aycore', 'renderer_path':str(renderer)}
-    cache=renderer.parent/'CMakeCache.txt'
+    build=args.build_dir.resolve() if args.build_dir else renderer.parent
+    cache=build/'CMakeCache.txt'
+    if args.build_dir and (not cache.is_file() or digest(build/'aytool')!=digest(renderer)):
+        p.error('Installed renderer does not match the declared production build')
     if cache.exists():
+        if 'CMAKE_BUILD_TYPE:STRING=Release' not in cache.read_text():
+            p.error('Fidelity demonstration requires an optimized Release build')
         manifest['candidate']['cmake_cache_sha256']=digest(cache)
         for line in cache.read_text().splitlines():
             if line.startswith(('CMAKE_CXX_COMPILER:FILEPATH=','CMAKE_CXX_FLAGS_RELEASE:STRING=','Qt6_DIR:PATH=','CMAKE_BUILD_TYPE:STRING=')):
@@ -222,7 +228,9 @@ def main():
                 'adapter_source_sha256':digest(oracle.with_suffix('.pas')),
                 'observer_source_sha256':digest(observed.with_suffix('.pas')),
                 'provenance':json.loads((ROOT/'reference/oracle/provenance.json').read_text()),
-                'original_pair_qualification':'BIT_EXACT_PCM' if args.private else 'NOT_EXECUTED'}
+                'original_pair_qualification':'BIT_EXACT_PCM' if args.private else 'NOT_EXECUTED',
+                'adapter_architecture':'Linux x86-64 (separate reference executable)',
+                'compiler_version':subprocess.check_output([ROOT/'reference/toolchain/usr/bin/ppcx64','-iV'],text=True).strip() if (ROOT/'reference/toolchain/usr/bin/ppcx64').exists() else 'UNKNOWN'}
             measure('qualified-source-oracle',source,reference,events=trace)
             # Original synthetic integration input supports independently tested
             # AY/YM, clock, timing, rates, preamp and FIR/averager without private music.

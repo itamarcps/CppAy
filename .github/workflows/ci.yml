@@ -59,7 +59,10 @@ jobs:
         run: |
           python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools qtsvg
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
+          # Declare this SDK as the runner's system runtime. Package checks
+          # remove development Qt/QML environment overrides.
+          echo "$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" | sudo tee /etc/ld.so.conf.d/cppay-ci-qt.conf
+          sudo ldconfig
       - run: cmake --preset linux-release
       - run: cmake --build --preset linux-release --parallel 2
       - run: ctest --preset linux-release --no-tests=error --output-junit desktop-tests.xml
