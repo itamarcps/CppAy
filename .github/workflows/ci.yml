@@ -57,7 +57,7 @@ jobs:
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
       - name: Qt 6.11.2
         run: |
-          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools qtsvg
+          python -m aqt install-qt linux desktop 6.11.2 linux_gcc_64 --outputdir "$RUNNER_TEMP/Qt" --modules qtmultimedia qtshadertools
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64" >> "$GITHUB_ENV"
           # Declare this SDK as the runner's system runtime. Package checks
           # remove development Qt/QML environment overrides.
