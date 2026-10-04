@@ -115,6 +115,12 @@ def page(out, reports):
     });
     </script></html>''')
 
+def aggregate_result(reports, required_gate, error=None):
+    passed=bool(reports) and not error and all(r['status'] in pcm.ACCEPTED for _,r in reports)
+    if passed:return 'PASS'
+    blocked=required_gate.get('status','')
+    return blocked if blocked.startswith('BLOCKED_') else 'MISMATCH'
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--renderer',type=pathlib.Path,required=True)
@@ -264,9 +270,7 @@ def main():
     manifest['commands']=commands
     manifest['results']=[{'fixture':name,'status':r['status'],'report':name+'/report.json'} for name,r in reports]
     passed=bool(reports) and not manifest.get('error') and all(r['status'] in pcm.ACCEPTED for _,r in reports)
-    manifest['aggregate_status']='PASS' if passed else manifest.get('required_gate',{}).get('status','MISMATCH')
-    if not passed and manifest['aggregate_status']=='BIT_EXACT_PCM':manifest['aggregate_status']='MISMATCH'
-    if not passed and manifest['aggregate_status']=='NOT_EXECUTED':manifest['aggregate_status']='MISMATCH'
+    manifest['aggregate_status']=aggregate_result(reports,manifest.get('required_gate',{}),manifest.get('error'))
     save(out/'manifest.json',manifest);(out/'summary.md').write_text(table(reports));page(out,reports)
     checksums={str(f.relative_to(out)):digest(f) for f in sorted(out.rglob('*')) if f.is_file()}
     save(out/'SHA256SUMS.json',checksums)

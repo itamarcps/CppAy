@@ -85,6 +85,16 @@ class ComparatorTests(unittest.TestCase):
    self.assertEqual(mod.compare_events(r,c)['status'],'FAIL_EVENTS')
    events[1]['ordinal']=0;c.write_text(''.join(json.dumps(e)+'\n' for e in events))
    with self.assertRaises(ValueError):mod.compare_events(r,c)
+ def test_aggregate_cannot_pass_one_failure_or_zero_cases(self):
+  import sys
+  sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]/'tools'))
+  import release_fidelity
+  cases=[('left',{'status':'BIT_EXACT_PCM'}),('right',{'status':'MISMATCH'})]
+  self.assertEqual(release_fidelity.aggregate_result(cases,{'status':'NEAR_MATCH_TARGET_MET'}),'MISMATCH')
+  self.assertEqual(release_fidelity.aggregate_result([],{'status':'BIT_EXACT_PCM'}),'MISMATCH')
+  cases[1][1]['status']='NEAR_MATCH_TARGET_MET'
+  self.assertEqual(release_fidelity.aggregate_result(cases,{'status':'NEAR_MATCH_TARGET_MET'}),'PASS')
+  self.assertEqual(release_fidelity.aggregate_result(cases,{'status':'BLOCKED_MISSING_REFERENCE'},'missing'),'BLOCKED_MISSING_REFERENCE')
  def test_riff_padding_and_bounds(self):
   fmt=struct.pack('<HHIIHH',1,1,4,8,2,16)
   body=b'WAVE'+b'JUNK'+struct.pack('<I',1)+b'x\0'+b'fmt '+struct.pack('<I',16)+fmt+b'data'+struct.pack('<I',4)+struct.pack('<hh',3,-4)
