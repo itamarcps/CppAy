@@ -1,134 +1,46 @@
-# C++Ay 0.1.0 — first public release
+# C++Ay 0.1.0
 
-**Focused initial release; full original AY_Emul scope remains unfinished.**
+A native AY/YM chiptune player with a retro desktop interface.
 
-[Downloads and checksums](https://github.com/itamarcps/CppAy/releases/tag/v0.1.0) ·
-[Repository](https://github.com/itamarcps/CppAy)
+## Features
 
-C++Ay is a native C++20/Qt Quick chiptune player for Linux, preserving a
-slate/silver/amber late-2000s interface. It streams PT3/PT3.7 TurboSound,
-PSG 0–10 and YM3/YM3b, with compact native-import playlists, three/six voice
-scopes, mixer settings, seeking, logarithmic volume, WAV/batch export and
-atomic ten-second crash-resume checkpoints.
+- PT3, PT3.7 TurboSound, PSG 0–10 and YM3/YM3b playback.
+- Native file selection, recursive folder import, drag and drop, M3U playlists
+  and embedded track titles.
+- Streaming playback, seeking, repeat, logarithmic volume and three/six
+  independent channel oscilloscopes.
+- Compact chip/stereo/output mixer and WAV/batch export from the beginning.
+- Session recovery with automatic checkpoints every ten seconds.
+- Custom window controls and a slate, silver and amber theme.
 
-## Changes in this pass
+## Downloads
 
-- Retained the previously implemented custom header, branding and window controls.
-- Fixed WAV-collision error notification; existing audio/cursor remain intact.
-- Fixed evidence-directory creation and misleading smoke-result fields.
-- Added actual-device EOF/pause/resume/stop/repeat regression.
-- Strengthened comparator bounds/metadata, quiet/right-channel/final-tail checks,
-  full diagnostics, threshold/event negatives and float residual range.
-- Added one-command evidence, real numerical plots, tested offline A/B playback
-  and a range-aware dependency-free listening server.
-- Prepared Linux system-runtime packaging and consistent version/build provenance;
-  updated lean CI without automatic publication.
-- Rewrote README with the supplied actual screenshot, measured results, public
-  listening sample, tested commands, honest limitations and credits.
+- [Windows x64 ZIP](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-windows-x64.zip): extract everything and run `C++Ay.exe`.
+- [Linux x86-64 archive](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-linux-x86_64.tar.gz): extract and run `bin/C++Ay`. Requires the compatible CachyOS/Arch Qt 6.11.2, GCC and glibc runtime listed in `INSTALL.txt` and `PACKAGE.json`.
+- [Source archive](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-source.tar.gz): build with C++20, CMake 3.24+ and Qt 6.8+.
+- [Audio evidence](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/C%2B%2BAy-0.1.0-public-evidence.tar.gz): independent synthetic references, C++Ay audio, measurements and an offline listening report.
+- [SHA-256 checksums](https://github.com/itamarcps/CppAy/releases/download/v0.1.0/SHA256SUMS).
 
-## Verification executed locally
+Linux uses system Qt; the archive is not a universal portable bundle. Windows
+includes Qt/MinGW runtimes and their notices. Windows binaries were tested under
+Wine; physical Windows hardware remains unverified. No macOS build is provided.
 
-| Gate | Result |
-| --- | --- |
-| Isolated native Release configure/build | PASS; GCC 16.2.1, Qt 6.11.2, C++20, `-O3 -DNDEBUG` |
-| Native CTest, private pair enabled | **12/12 passed**, no skips; includes sixteen comparator cases |
-| Core ASan/UBSan | Prior unchanged-core candidate: **5/5 passed**, no sanitizer findings; public CI repeats this gate |
-| Public source snapshot, fresh `/tmp` build | Prior candidate: **9/9 passed**, no skips; private fixtures absent |
-| Public independent fidelity | **12/12 BIT_EXACT_PCM**, ordered events exact |
-| Full packaged-renderer qualification | **27/27 BIT_EXACT_PCM**; reports cover each channel/full interval/windows |
-| Pascal repeatability / instrumentation | Three renders identical; original direct export qualification bit-exact |
-| Required pair missing in fresh public source | Correct nonzero exit: **BLOCKED_MISSING_REFERENCE** |
-| Extracted Linux package, fresh XDG settings, development overrides removed | PASS on declared CachyOS/KDE Wayland runtime |
-| Packaged GUI WAV vs original reference | **BIT_EXACT_PCM**, 2,457,879 stereo frames, zero unequal samples |
-| Real QtAudio playback / rapid track changes | PASS; recorded zero underruns; cursor/mixer/List tools/import while playing verified |
-| Three/six-channel layout at 125% scaling | Prior Linux candidate and current Windows: eight size/channel cases PASS; compact controls/resources checked |
-| Custom header | Maximize/restore, double-click, minimize, close and eight resize handles PASS |
-| Browser listening report | Prior same-tool candidate PASS: local paths/audio, A/B cursor preservation, exclusive playback and pause/reverse switch |
-| MinGW Windows x64 / Wine | PASS: twelve independent cases, full private PCM, Unicode/no-overwrite, GUI export, audio/streaming, layouts/header |
-| Physical Windows / macOS | **NOT EXECUTED** |
-| GitHub Actions | [Actual public workflow results](https://github.com/itamarcps/CppAy/actions/workflows/ci.yml); see run status, not a syntax-only claim |
+## Verification
 
-These results certify rendered PCM in the stated scope. The device checks establish
-application/backend playback behavior, not numerical equivalence through a sound
-server, DAC or physical device. Wayland system drag/resize requires real pointer
-input; automated header checks establish controls/handle layout, not every compositor's
-pointer-driven geometry behavior. No fresh-machine portability claim is made.
+Native Release tests passed 12/12. The qualification corpus passed 27/27
+**BIT_EXACT_PCM**, including the complete 2,457,879-frame direct AY_Emul export.
+The redistributable subset passed 12/12 with exact ordered register events.
+Offline PCM equivalence does not certify a sound server or physical audio device.
 
-## Fidelity identity and results
+[Build and sanitizer CI](https://github.com/itamarcps/CppAy/actions/workflows/ci.yml) ·
+[Measurements and provenance](https://github.com/itamarcps/CppAy/blob/main/docs/FIDELITY.md) ·
+[Build instructions](https://github.com/itamarcps/CppAy/blob/main/docs/BUILDING.md).
 
-The production implementation/verification source revision is
-`a43c485766d237fa4891d0c07f74f27506804ed2` (full hash in the generated manifest). Subsequent documentation/evidence
-commits do not alter its application/core/tool inputs. The installed renderer
-SHA-256 is `8d6207f4c4933931725473351139946a8e3b6719d95e22f51dad801402e41d75`.
-The exact compiler, Qt version, flags, CMake-cache hash, fixture identities,
-profile and commands are retained in the evidence manifest.
+## Limitations
 
-Original supplied Flexo02 direct AY_Emul export: 48 kHz, signed 16-bit, L/R,
-2,457,879 frames (51.2058125 seconds). **BIT_EXACT_PCM**, zero unequal samples,
-maximum error zero LSB, each channel whole-track and worst-window relative RMS
-zero; residual SNR infinite (explicit null/status in JSON). No trim, fitted
-offset/gain or missing tail. Original export executable version/architecture
-are unknown; fixed source-default profile is inferred and golden-qualified.
-Independent Pascal routines originate in AY_Emul 3.0 beta, not the unknown
-original export binary. The original WAV has no original event trace; the
-separate qualified source-oracle case has exact ordered events.
+Support is limited to the formats above. CPU-backed AY/AYM, SNDH, other tracker
+families, YM4–6/VTX, subsong selection, structural music search, AYL/PLS/CUE,
+audio-device selection and tray integration are not implemented.
 
-[Generated full table](fidelity/summary.md) · [manifest and contract](FIDELITY.md) ·
-[public listening example](fidelity/listening/index.html).
-
-Local evidence:
-
-- `build-release-0.1.0/qualified-evidence/` — complete **private** 27-case
-  evidence, per-case WAV/JSON/plots/residuals, qualification, commands and checksums.
-- `build-release-0.1.0/qualified-evidence.tar.gz` — **private; do not share**.
-- `build-release-0.1.0/public-evidence/` — public twelve-case offline report.
-- `build-release-0.1.0/runtime-evidence/` — installed GUI/device/layout/browser/Wine reports.
-
-Reproduce the exact installed-renderer gate:
-
-```sh
-python3 tools/release_fidelity.py --renderer build-release-0.1.0/release/C++Ay-0.1.0-linux-x86_64/bin/aytool --build-dir build-release-0.1.0 --output build-release-0.1.0/reproduced-evidence --private --oracle reference/oracle/oracle
-```
-
-## Packages and installation
-
-All public candidate artifacts, exact sizes and SHA-256 identities are in
-`build-release-0.1.0/release/release-manifest.json`; verify with:
-
-```sh
-cd build-release-0.1.0/release
-sha256sum -c SHA256SUMS
-```
-
-- `C++Ay-0.1.0-linux-x86_64.tar.gz`: extract and run `bin/C++Ay`.
-  Requires compatible installed CachyOS/Arch Qt 6.11.2/GCC/glibc, QML/style,
-  Wayland/XCB and audio runtime packages. Read `INSTALL.txt`/`PACKAGE.json`.
-  Libraries/plugins/fonts/translations are supplied by the declared system runtime;
-  this archive is not universally portable. Embedded QML/branding is included.
-- `C++Ay-0.1.0-windows-x64.zip`: extract everything and run `C++Ay.exe`.
-  Bundled matching Qt/MinGW DLLs/QML/plugins and original runtime notices/SBOMs.
-  Wine qualified; physical Windows 11 x64 remains untested.
-- `C++Ay-0.1.0-source.tar.gz`: public source, synthetic tests and small docs
-  evidence; excludes private music, builds/SDKs and reference executables.
-- `C++Ay-0.1.0-public-evidence.tar.gz`: offline public listening/measurement bundle,
-  suitable for sharing; no private reference audio.
-
-Original project/branding is MIT; AY_Emul-derived routines retain Sergey Bulba's
-notice. Qt/MinGW and other distributed components retain their own terms.
-[Notices](../THIRD_PARTY.md).
-
-## Remaining required work and publication limits
-
-Full original scope is not finished: CPU-backed AY/AYM, SNDH/68000/MFP/DMA,
-other tracker families, YM4–6/digidrums/VTX/depacking/containers, structural
-music finder, subsong UI, AYL/PLS/CUE, item overrides, device chooser, tray and
-broader conversion paths remain implementation work in
-[IMPLEMENTATION.md](../IMPLEMENTATION.md). Selected PT3 results cannot certify
-those paths. Existing exclusions remain explicit. Broader real-song/DPI/a11y
-and physical Windows validation remain limited.
-
-The original real music has no established redistribution permission: its
-private evidence cannot be a public release asset. Numerical summaries and
-original synthetic examples can be shared. The public destination is
-[`itamarcps/CppAy`](https://github.com/itamarcps/CppAy). Publication is manual;
-see [maintainer instructions](RELEASING.md).
+[Format and feature coverage](https://github.com/itamarcps/CppAy/blob/main/IMPLEMENTATION.md) ·
+[License and component notices](https://github.com/itamarcps/CppAy/blob/main/THIRD_PARTY.md).

@@ -1,20 +1,45 @@
 {
   "schema_version": 1,
   "profile_version": "bulba-3.0-source-default-v1",
-  "acceptance": {"relative_rms_error_max": 0.000001, "maximum_error_lsb": 1, "window_seconds": 1, "offset_frames": 0},
+  "acceptance": {
+    "relative_rms_error_max": 1e-06,
+    "maximum_error_lsb": 1,
+    "window_seconds": 1,
+    "offset_frames": 0
+  },
   "profile": {
-    "chip_model": "YM2149F", "chip_count": "module metadata: one or PT3.7 TurboSound two",
-    "master_clock_hz": 1773400, "interrupt_hz": 50, "subsong": 0,
-    "rate_hz": 48000, "bits": 16, "channels": 2, "channel_order": ["L", "R"],
-    "gains_AL_AR_BL_BR_CL_CR": [255, 13, 170, 170, 13, 255], "preamp": 127,
-    "beeper_gain": 146, "dma_gain": 146, "beeper_dma_active": false,
-    "filter": "source 49-tap FIR, 24 fractional coefficient bits", "filter_quality": 1,
+    "chip_model": "YM2149F",
+    "chip_count": "module metadata: one or PT3.7 TurboSound two",
+    "master_clock_hz": 1773400,
+    "interrupt_hz": 50,
+    "subsong": 0,
+    "rate_hz": 48000,
+    "bits": 16,
+    "channels": 2,
+    "channel_order": [
+      "L",
+      "R"
+    ],
+    "gains_AL_AR_BL_BR_CL_CR": [
+      255,
+      13,
+      170,
+      170,
+      13,
+      255
+    ],
+    "preamp": 127,
+    "beeper_gain": 146,
+    "dma_gain": 146,
+    "beeper_dma_active": false,
+    "filter": "source 49-tap FIR, 24 fractional coefficient bits",
+    "filter_quality": 1,
     "coefficient_routine_utf8_sha256": "509290fa06148b97149de0cd3a6479878aa71497cea4227fe799a61c3438f941",
-    "counter_ticks_per_interrupt": 4434, "pcm_step_16_16": 302660,
+    "counter_ticks_per_interrupt": 4434,
+    "pcm_step_16_16": 302660,
     "initial_state": "reset decoder, chip/noise/envelope, FIR history and interpolation phase",
     "end_policy": "first natural end, no FIR tail flush",
-    "settings_origin": "source defaults, golden-qualified against original direct export; model/clock/gains/filter inferred together, not derived from WAV header",
-    "later_settings_screenshots": "User confirmed screenshots were taken later; retain golden-qualified profile"
+    "settings_origin": "source defaults, golden-qualified against original direct export; model/clock/gains/filter inferred together, not derived from WAV header"
   },
   "public_corpus": {
     "manifest": "tests/fixtures/manifest.json",
@@ -24,11 +49,23 @@
     "redistribution": "original synthetic inputs under project MIT; derived expected outputs retain AY_Emul notice"
   },
   "required_private": {
-    "identity": "user-supplied Flexo02 PT3/direct AY_Emul WAV pair",
-    "input": {"path": "samples/Flexo02.pt3", "size": 1224, "sha256": "293a79f8627932c812e1daa5e30f07bf0e820e9348a0a543fe2e7af1bacaa415"},
-    "reference": {"path": "samples/Flexo02.wav", "size": 9831560, "sha256": "ffb13234c83718d28816e954c227eaec2ac043ad0b614652a0c5330f5989f855", "frames": 2457879, "duration_seconds": 51.2058125, "riff_oversize_bytes": 8},
-    "provenance": "user confirms unedited direct AY_Emul WAV conversion; original bytes retained",
-    "reference_executable_version": null, "reference_executable_architecture": null,
+    "identity": "Flexo02 PT3/direct AY_Emul WAV reference pair",
+    "input": {
+      "path": "samples/Flexo02.pt3",
+      "size": 1224,
+      "sha256": "293a79f8627932c812e1daa5e30f07bf0e820e9348a0a543fe2e7af1bacaa415"
+    },
+    "reference": {
+      "path": "samples/Flexo02.wav",
+      "size": 9831560,
+      "sha256": "ffb13234c83718d28816e954c227eaec2ac043ad0b614652a0c5330f5989f855",
+      "frames": 2457879,
+      "duration_seconds": 51.2058125,
+      "riff_oversize_bytes": 8
+    },
+    "provenance": "Contributor-confirmed unedited direct AY_Emul WAV export; original bytes retained",
+    "reference_executable_version": null,
+    "reference_executable_architecture": null,
     "unknown_identity_reason": "No binary/build identity retained from original conversion; source-default profile separately qualified",
     "redistribution": "PRIVATE: no permission recorded; omit music/audio/traces from public archives"
   },

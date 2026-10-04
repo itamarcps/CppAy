@@ -2,29 +2,16 @@
 
 ## 0.1.0 — 2026-10-04
 
-- Publish the first focused release at `itamarcps/CppAy`, with Linux x86-64,
-  Windows x64, source and redistributable audio-evidence downloads.
-- Set application, CLI, Windows resource and package versions to `0.1.0`.
-- Rebuild both platforms and refresh packaged-renderer evidence: all 27 cases
-  are bit-exact; native tests pass 12/12 and Windows checks pass under Wine.
-- Add real release download links and SHA-256 checksums.
+First public release.
 
+- PT3/PT3.7 TurboSound, PSG 0–10 and YM3/YM3b playback.
+- Compact playlists with native file/folder import, embedded titles, reordering
+  and M3U support.
+- Streaming audio, seeking, repeat, logarithmic volume and independent scopes.
+- Chip/stereo/output mixer, WAV/batch export and overwrite protection.
+- Automatic ten-second session checkpoints and playback restoration.
+- Retro interface with custom window controls.
+- Linux x86-64 and Windows x64 packages.
+- Independent PCM/event comparison, reproducible audio reports and regression tests.
 
-## 0.1.0-rc.1 — 2026-10-04 (local candidate)
-
-- Preserve the C++Ay retro interface, branding, compact native-import playlist,
-  logarithmic volume and ten-second atomic resume checkpoints.
-- Include the custom draggable/resizable title bar and window controls.
-- Notify listeners immediately when a WAV destination collision prevents export;
-  preserve existing output and playback position.
-- Strengthen full-interval PCM comparison, event checks, negative tests and
-  full-range float residual output; limit the original WAV-container exception.
-- Add reproducible independent fidelity reports, real plots and tested offline
-  A/B listening, with a range-aware local server.
-- Add actual-device transport/EOF regression, consistent version reporting and
-  Linux system-runtime packaging/provenance; retain verified MinGW/Wine packaging.
-- Rewrite README around the supplied real screenshot, measured scope, tested
-  commands, limitations, attribution and local candidate artifacts.
-
-Full original AY_Emul application/format parity remains unfinished. See
-[coverage](IMPLEMENTATION.md) and [release verification](docs/RELEASE_NOTES.md).
+See [release notes](docs/RELEASE_NOTES.md) for downloads and platform limitations.

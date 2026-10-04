@@ -105,7 +105,8 @@ replace physical Windows device testing.
 `device_transport_behavior` exercises the actual Qt audio sink: EOF advances
 exactly once, final EOF stops, pause/resume/stop and whole-song repeat remain on
 the correct track. It returns CTest skip code 77 if no device is available;
-that is not device certification. The locally prepared candidate executed it.
+that is not device certification. The published Linux binary was tested with
+an available audio device.
 
 The comparator has sixteen independently calculable/negative tests, including
 threshold boundaries, a corrupted right channel, quiet/final windows, inserted

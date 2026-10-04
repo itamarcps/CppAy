@@ -1,7 +1,6 @@
 # PCM fidelity and reproducibility
 
-The fixed engineering interpretation of the original audio requirement is
-complete-interval PCM equivalence. It is not a perceptual accuracy percentage.
+The acceptance contract is complete-interval PCM equivalence. It is not a perceptual accuracy percentage.
 The public summary is generated from schema-2 reports by
 `tools/publish_fidelity_summary.py`; its `--check` mode detects stale values.
 
@@ -27,7 +26,7 @@ residual_SNR_dB = 20 log10(RMS(r) / RMS(e))
 No gate uses gain fitting, normalization, DC removal, channel swaps, polarity
 changes, resampling, alignment, time stretching, EQ or selective cropping.
 Start/middle/end checks are zero-offset diagnostics. RIFF chunks/padding and
-actual bounds are validated; only the exact immutable supplied export hash has
+actual bounds are validated; only the exact immutable reference export hash has
 the verified eight-byte oversized RIFF-header exception. New exports are valid
 WAV files. The hash exception identifies a container quirk, never playback PCM.
 
@@ -35,8 +34,8 @@ WAV files. The hash exception identifies a container quirk, never playback PCM.
 
 [Machine-readable fixture/profile manifest](../tests/fixtures/fidelity-manifest.json)
 records original pair hashes/sizes, default profile, provenance and unknowns.
-The supplied `samples/Flexo02.pt3` / `Flexo02.wav` is an unedited **direct AY_Emul
-WAV conversion**, confirmed by the user. The original export executable version,
+The private reference pair `samples/Flexo02.pt3` / `Flexo02.wav` contains an
+unedited **direct AY_Emul WAV export**, with provenance confirmed by its contributor. The original export executable version,
 build and architecture are unknown. The source reference is Sergey Bulba's
 AY_Emul **3.0 beta**, with source identities in
 [adapter provenance](../reference/oracle/provenance.json) and a reviewable
@@ -45,21 +44,20 @@ AY_Emul **3.0 beta**, with source identities in
 The fixed source-default YM2149F/1,773,400 Hz/50 Hz profile uses ABC gains
 255/13, 170/170, 13/255, preamp 127, 49-tap FIR and source reset/end semantics.
 These settings are inferred from source defaults and qualified together against
-the entire original export. WAV headers cannot establish them. The user confirmed
-later AY_Emul settings screenshots were not the conversion settings and instructed
-us to keep this profile. Beeper/DMA gains are inactive on this PT3 path.
+the entire original export. Contemporaneous export settings are unavailable;
+WAV headers alone cannot establish them. Beeper/DMA gains are inactive on this PT3 path.
 
 The minimal Pascal adapter is independently compiled source code, not the
 unknown original export executable. It is rendered twice and with observation;
 all three must have identical PCM, and its original-sample output must match
-the supplied direct export. Original sources are not altered. Public immutable
+the direct reference export. Original sources are not altered. Public immutable
 fixtures cover selected effects, noise/envelope retriggering, PSG/YM and native
 TurboSound; optional source-oracle cases add PT3 header versions/tables and
 AY/YM/rate/clock/preamp/FIR/averager profiles. Header mutations are synthetic
 cases, not representative real songs. First-natural-end tests do not certify
 repeated loop-point continuation or every tracker effect/version.
 
-The supplied direct export has no original independent event trace. A separately
+The direct reference export has no original independent event trace. A separately
 qualified source adapter can provide ordered events; the report states which
 trace was used. Unavailable traces stay explicitly unavailable.
 
@@ -86,7 +84,7 @@ The float residual is in normalized reference amplitude at gain 1, without
 clipping, including differences beyond unity. It is a derivative, not a gate
 input. Exact zero residual is drawn as zero, not fabricated visible noise.
 
-The **required user-fixture release gate** adds the original private pair:
+The **private-reference qualification gate** adds the original private pair:
 
 ```sh
 python3 tools/release_fidelity.py --renderer build-release/aytool --output build-release/required-fidelity --private
@@ -106,7 +104,7 @@ python3 tools/release_fidelity.py --renderer build-release/aytool --output build
 See [reference setup](../reference/README.md) for source hashes/adapters. This
 optional command never regenerates committed expectations. Original music and
 its generated audio/trace are **private**: do not distribute that archive.
-Public-only bundles contain original synthetic examples, not user music.
+Public-only bundles contain original synthetic examples, not private music.
 
 ## Listen and inspect
 

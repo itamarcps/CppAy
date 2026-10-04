@@ -116,7 +116,7 @@ The exact archive was extracted in `/tmp`, launched outside source/build folders
 with Qt/QML/LD development overrides removed and fresh XDG settings, exercised
 on KDE Wayland with real QtAudio output, and its GUI WAV re-compared against the
 original direct export. This verifies the declared host-runtime scenario, not a
-fresh machine without dependencies. See [candidate results](RELEASE_NOTES.md).
+fresh machine without dependencies. See [release verification](RELEASE_NOTES.md).
 
 Qt provides [QML deployment helpers](https://doc.qt.io/qt-6.8/qt-generate-deploy-qml-app-script.html)
 for runtime-bundling models. This archive deliberately depends on system Qt;

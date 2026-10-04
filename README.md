@@ -21,7 +21,7 @@ player to native streaming playback, compact playlists and independent channel s
 - Atomic playlist/settings/position checkpoints every ten seconds and on exit.
   Reopening without file arguments resumes the saved play/pause state.
 - Custom title bar: drag to move, double-click to maximize/restore, edge/corner
-  resize, minimize and close. Existing logo and retro controls throughout.
+  resize, minimize and close.
 
 | Format | Implemented support | Independent evidence / limits |
 | --- | --- | --- |
@@ -30,16 +30,16 @@ player to native streaming playback, compact playlists and independent channel s
 | PSG | Versions 0–10, file timing and explicit override | Synthetic register/noise/envelope/skip cases; other variants rejected |
 | YM | YM3/YM3b | Synthetic PCM/events; YM4–6, digidrums and compressed VTX absent |
 
-Complete AY_Emul application parity is **unfinished**. CPU-backed AY/AYM, SNDH,
+Additional AY_Emul formats and tools are not yet supported. CPU-backed AY/AYM, SNDH,
 other tracker families, structural music finder, subsong UI, AYL/PLS/CUE and tray
-integration remain required work in the [coverage record](IMPLEMENTATION.md).
+integration are listed in the [format and feature coverage](IMPLEMENTATION.md).
 This release does not implement or certify them. Python and Pascal are
 verification tools, not playback dependencies.
 
 ## Measured audio fidelity
 
 C++Ay compares its native PCM with independently produced AY_Emul audio.
-The original supplied direct export passes the fixed complete-interval contract;
+An independent direct AY_Emul export passes the fixed complete-interval contract;
 additional synthetic source-reference cases support the scope listed above.
 There is no fitted gain, offset, resampling or omitted tail.
 
@@ -74,7 +74,7 @@ Public synthetic example, **entire 0.6400625-second interval, gain 1**:
 [C++Ay WAV](docs/fidelity/listening/native-ts.pt3/candidate.wav) ·
 [detailed measurements](docs/fidelity/listening/native-ts.pt3/report.json) ·
 [offline A/B report](docs/fidelity/listening/index.html).
-The supplied real music is private; only its numerical results/hashes are public.
+The real-music reference is not redistributed; its numerical results and hashes are public.
 [All measured rows and profile cases](docs/fidelity/summary.md).
 
 To listen locally with reliable WAV seeking:
@@ -203,15 +203,14 @@ playback volume is separate from canonical export/comparison PCM.
 
 ## Status and credits
 
-The focused release's verified formats are listed above; full original scope
-is still open. Linux tests ran on CachyOS/KDE Wayland with an available audio
+The verified formats and their limitations are listed above. Linux tests ran on CachyOS/KDE Wayland with an available audio
 output. Wine is a compatibility test, not physical Windows validation. Broader
 DPI/accessibility, hardware/device and real-world format coverage remain limited.
 
 Report issues with the application version, OS/Qt/audio backend, format/profile,
 reproduction steps and logs. Attach music only when you have permission to share
 it. [Open an issue](https://github.com/itamarcps/CppAy/issues).
-[Release notes and handoff](docs/RELEASE_NOTES.md) ·
+[Release notes](docs/RELEASE_NOTES.md) ·
 [publication instructions](docs/RELEASING.md) · [contributing](CONTRIBUTING.md).
 
 Original project contributions and branding: **MIT**, [LICENSE](LICENSE).

@@ -61,7 +61,6 @@
     "pcm_step_16_16": 302660,
     "initial_state": "reset decoder, chip/noise/envelope, FIR history and interpolation phase",
     "end_policy": "first natural end, no FIR tail flush",
-    "settings_origin": "source defaults, golden-qualified against original direct export; model/clock/gains/filter inferred together, not derived from WAV header",
-    "later_settings_screenshots": "User confirmed screenshots were taken later; retain golden-qualified profile"
+    "settings_origin": "source defaults, golden-qualified against original direct export; model/clock/gains/filter inferred together, not derived from WAV header"
   }
 }
