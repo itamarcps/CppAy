@@ -40,3 +40,50 @@ fixtures with immutable hashes. Integration checks exercise canonical streaming,
 seek, independent/silent channels, scope triggering, bulk metadata import,
 controller export and real ten-second crash checkpoints. See
 [testing](docs/TESTING.md) and [reference provenance](reference/README.md).
+
+## Release preparation checkpoint — 0.1.0-rc.1 (2026-10-04)
+
+Baseline: `main`, `c65090aecb270530490bca589800f0a0223c2845`, no remote.
+The working tree already contained the custom-window implementation, its tests,
+CI/docs edits and screenshot. They are preserved in this candidate. C++20,
+CMake 3.24+, Qt 6.8+ minimum remain; local Release uses Qt 6.11.2/GCC 16.2.1,
+`-O3 -DNDEBUG`. Outputs are `C++Ay` and `aytool`; Windows equivalents use `.exe`.
+
+| Gap established from this checkout | Fix / acceptance check |
+| --- | --- |
+| Comparator accepted any +8 RIFF size and lacked full diagnostics | Restrict exception to immutable original WAV; schema 2, per-channel/windows/location/peak/DC/clipping reports; independent negative tests |
+| Residual could overflow 16-bit and abort | Unscaled IEEE float32 residual, full-range regression |
+| Export collision did not emit completion/error signal | Emit actionable failure synchronously; assert original destination/cursor preserved |
+| Smoke test relied on precreated report directory; some report fields claimed success unconditionally | Create/check directory; report check outcomes and optional import coverage honestly |
+| Last-track EOF/repeat lacked focused actual-device regression | Device transport test; explicitly skipped with code 77 if no device |
+| No single release evidence command, plots or tested A/B report | Shared `aytool` + strict comparator + `release_fidelity.py`; missing required pair fails; independent repeatability/observer qualification and profiles |
+| No Linux release archive/runtime record | System-Qt binary archive, QML/plugin scan, ELF dependencies/symbol versions, clean extraction/device/export verification |
+| README lacked measurable evidence/current screenshot | User-supplied real screenshot, generated numerical table, public plot/audio example, linked complete criteria |
+| No consistent candidate version/provenance | 0.1.0-rc.1 CLI/About/PE resource/package version; source snapshot, reports and checksums |
+
+Full original implementation scope remains **unfinished**. A qualified focused
+candidate cannot satisfy the original complete-AY_Emul application requirement:
+other native tracker families, CPU-backed AY/EMUL and AYM, SNDH/68000/MFP/DMA,
+YM4–6/digidrums/VTX/depacking/container families, structural music finder,
+AYL/PLS/CUE and per-item/subsong overrides, subsong UI, device chooser, tray and
+broader conversions are not implemented. These are implementation work, not
+external blockers and not silently removed from the requirements. Existing
+exclusions remain ZX50, PSG2/BK and standalone AS0 conversion outside baseline.
+
+The verified candidate covers PT3/PT3.7 TurboSound, supported PSG, YM3/YM3b and
+existing playback/playlist/mixer/export/session UI. Required private music bytes
+are found and preserved. Their redistribution permission is absent; private
+verification is allowed, public distribution of that music is not assumed.
+Original export binary version/architecture are unknown; this is disclosed,
+while the source-default profile is qualified against its full direct export.
+
+The production path is loader (`pt3.cpp`/`logs.cpp`) → ordered register events
+and source integer interrupt timing → AY/YM chip state → source gain tables,
+FIR/averager and interpolation → signed stereo 16-bit PCM (`engine.cpp`).
+`StreamRenderer` supplies both live `PlaybackSession` and `renderFile` used by
+controller WAV export and `aytool`; QtAudio applies logarithmic playback volume
+at the device sink only. No separate fidelity synthesizer exists. Offline tests
+do not certify the sound server, device, DAC or browser.
+
+Final executed results, artifact identities and outstanding gates are retained
+in [release notes](docs/RELEASE_NOTES.md) and [fidelity](docs/FIDELITY.md).

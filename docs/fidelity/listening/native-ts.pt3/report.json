@@ -1,0 +1,271 @@
+{
+  "schema_version": 2,
+  "reference": {
+    "rate_hz": 48000,
+    "channels": 2,
+    "bits": 16,
+    "frames": 30723,
+    "encoding": "signed_integer",
+    "channel_order": "L,R",
+    "sha256": "46e544f41fe9c34356304adf0113c373c4a32225083f9aa6c3d7e116d8fb26d6",
+    "riff_oversize_bytes": 0
+  },
+  "candidate": {
+    "rate_hz": 48000,
+    "channels": 2,
+    "bits": 16,
+    "frames": 30723,
+    "encoding": "signed_integer",
+    "channel_order": "L,R",
+    "sha256": "46e544f41fe9c34356304adf0113c373c4a32225083f9aa6c3d7e116d8fb26d6",
+    "riff_oversize_bytes": 0
+  },
+  "event_trace_status": "EXACT_ORDERED_EVENTS",
+  "offset_frames": 0,
+  "excluded_frames": 0,
+  "status": "BIT_EXACT_PCM",
+  "reason": "COMPLETE_INTERVAL_EQUAL",
+  "coverage_frames": 30723,
+  "duration_seconds": 0.6400625,
+  "unequal_samples": 0,
+  "unequal_sample_fraction": 0.0,
+  "first_mismatch": null,
+  "first_mismatch_seconds": null,
+  "channels": [
+    {
+      "samples": 30723,
+      "unequal_samples": 0,
+      "unequal_sample_fraction": 0.0,
+      "max_abs_error_lsb": 0,
+      "mean_error_lsb": 0.0,
+      "rms_error_lsb": 0.0,
+      "relative_rms_error": 0.0,
+      "residual_snr_db": null,
+      "relative_status": "finite",
+      "snr_status": "positive_infinity",
+      "target_met": true,
+      "channel": 0,
+      "first_mismatch_frame": null,
+      "first_mismatch_seconds": null,
+      "largest_error_frame": null,
+      "largest_error_seconds": null,
+      "location_status": "exact_no_error_location",
+      "reference_peak_lsb": 32767,
+      "candidate_peak_lsb": 32767,
+      "reference_clipping_samples": 35,
+      "candidate_clipping_samples": 35
+    },
+    {
+      "samples": 30723,
+      "unequal_samples": 0,
+      "unequal_sample_fraction": 0.0,
+      "max_abs_error_lsb": 0,
+      "mean_error_lsb": 0.0,
+      "rms_error_lsb": 0.0,
+      "relative_rms_error": 0.0,
+      "residual_snr_db": null,
+      "relative_status": "finite",
+      "snr_status": "positive_infinity",
+      "target_met": true,
+      "channel": 1,
+      "first_mismatch_frame": null,
+      "first_mismatch_seconds": null,
+      "largest_error_frame": null,
+      "largest_error_seconds": null,
+      "location_status": "exact_no_error_location",
+      "reference_peak_lsb": 32767,
+      "candidate_peak_lsb": 32767,
+      "reference_clipping_samples": 34,
+      "candidate_clipping_samples": 34
+    }
+  ],
+  "windows": [
+    {
+      "start_frame": 0,
+      "end_frame": 30723,
+      "kind": "consecutive_1s",
+      "channels": [
+        {
+          "samples": 30723,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        },
+        {
+          "samples": 30723,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        }
+      ]
+    },
+    {
+      "start_frame": 0,
+      "end_frame": 960,
+      "kind": "predetermined_transition",
+      "channels": [
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        },
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        }
+      ]
+    },
+    {
+      "start_frame": 15361,
+      "end_frame": 16321,
+      "kind": "predetermined_transition",
+      "channels": [
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        },
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        }
+      ]
+    },
+    {
+      "start_frame": 29763,
+      "end_frame": 30723,
+      "kind": "predetermined_transition",
+      "channels": [
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        },
+        {
+          "samples": 960,
+          "unequal_samples": 0,
+          "unequal_sample_fraction": 0.0,
+          "max_abs_error_lsb": 0,
+          "mean_error_lsb": 0.0,
+          "rms_error_lsb": 0.0,
+          "relative_rms_error": 0.0,
+          "residual_snr_db": null,
+          "relative_status": "finite",
+          "snr_status": "positive_infinity",
+          "target_met": true
+        }
+      ]
+    }
+  ],
+  "worst_window": {
+    "start_frame": 0,
+    "end_frame": 30723,
+    "kind": "consecutive_1s",
+    "channel": 0,
+    "metrics": {
+      "samples": 30723,
+      "unequal_samples": 0,
+      "unequal_sample_fraction": 0.0,
+      "max_abs_error_lsb": 0,
+      "mean_error_lsb": 0.0,
+      "rms_error_lsb": 0.0,
+      "relative_rms_error": 0.0,
+      "residual_snr_db": null,
+      "relative_status": "finite",
+      "snr_status": "positive_infinity",
+      "target_met": true
+    }
+  },
+  "alignment_diagnostics": {
+    "method": "zero-offset start/middle/end; no fitted alignment",
+    "segments": [
+      {
+        "start_frame": 0,
+        "end_frame": 30723,
+        "unequal_samples": 0
+      },
+      {
+        "start_frame": 15361,
+        "end_frame": 30723,
+        "unequal_samples": 0
+      },
+      {
+        "start_frame": 0,
+        "end_frame": 30723,
+        "unequal_samples": 0
+      }
+    ]
+  },
+  "events": {
+    "status": "EXACT_ORDERED_EVENTS",
+    "reference_events": 832,
+    "candidate_events": 832,
+    "first_divergence": null,
+    "reference_sha256": "3d27b496968e36e79f368f34a42b076ade716f8c0511023c13fcc59f5b374219",
+    "candidate_sha256": "3d27b496968e36e79f368f34a42b076ade716f8c0511023c13fcc59f5b374219"
+  },
+  "fixture": "native-ts.pt3",
+  "artifact_directory": "native-ts.pt3",
+  "profile": "bulba-3.0-source-default-v1",
+  "input": {
+    "path": "tests/fixtures/native-ts.pt3",
+    "sha256": "729ad5c096454451822c7e250b3e1d63998087dea5a882d368a9be59f8c6397d",
+    "size": 321
+  }
+}

@@ -1,127 +1,214 @@
-<p align="center"><img src="assets/cppay-logo.png" alt="C++Ay — Chip Music System" width="400"></p>
+<p align="center"><img src="assets/cppay-logo.png" alt="C++Ay — Chip Music System" width="420"></p>
 
 # C++Ay
 
-A 64-bit C++20 / Qt desktop chiptune player for Linux and Windows, with a
-2008–2013 desktop-player look and a native AY/YM audio engine.
+A 64-bit desktop player for AY/YM chiptunes, built in C++20 and Qt Quick.
+A slate, silver and amber interface brings the character of a late-2000s music
+player to native streaming playback, compact playlists and independent channel scopes.
 
-![C++Ay player](docs/images/player.png)
+<img src="docs/images/player.png" alt="C++Ay playing a PT3 module, with three channel oscilloscopes, transport controls and a compact playlist" width="1100">
 
-## Features
+## Play, collect and convert
 
-- Native PT3, PT3.7 TurboSound, PSG and YM3/YM3b playback.
-- Streaming synthesis, seeking, independent three/six-channel triggered scopes
-  and stereo meters.
-- Compact playlists with embedded music titles, native multi-file selection,
-  recursive folder import and M3U load/save.
-- Compact mixer for chip model, clock, timing, channel gains, output and filter.
-- WAV export from the start of the song, plus batch playlist export and CLI tools.
-- Playback position, playlist and settings saved every ten seconds and on exit;
-  launch without file arguments to resume.
+- **PT3, PT3.7 TurboSound, PSG and YM3/YM3b** with embedded titles and durations.
+- Streaming playback, pause/resume, seek, previous/next and whole-song repeat;
+  three or six triggered voice scopes and stereo meters.
+- Native multi-file chooser (including Ctrl+A), recursive folder import, drag/drop,
+  playlist reordering, M3U load/save and batch WAV export.
+- Compact mixer: AY/YM model, clock, interrupt timing, stereo gains, preamp,
+  sample rate and FIR/averager. Logarithmic playback volume.
+- Fresh-from-reset WAV export, independent of playback cursor and volume.
+- Atomic playlist/settings/position checkpoints every ten seconds and on exit.
+  Reopening without file arguments resumes the saved play/pause state.
+- Custom title bar: drag to move, double-click to maximize/restore, edge/corner
+  resize, minimize and close. Existing logo and retro controls throughout.
 
-The engine ports the relevant AY_Emul routines by Sergey Bulba. Complete
-AY_Emul format and feature parity is still in progress; see
-[implementation coverage](IMPLEMENTATION.md). Python and Pascal are development
-and reference tools, not playback dependencies.
+| Format | Implemented support | Independent evidence / limits |
+| --- | --- | --- |
+| PT3 | Native decoder, source version tables/effects | Original direct-export pair; selected synthetic effects and header/table cases |
+| PT3.7 TurboSound | Two chips, six voices | Synthetic PCM and ordered register events |
+| PSG | Versions 0–10, file timing and explicit override | Synthetic register/noise/envelope/skip cases; other variants rejected |
+| YM | YM3/YM3b | Synthetic PCM/events; YM4–6, digidrums and compressed VTX absent |
 
-## Build and run on Linux
+Complete AY_Emul application parity is **unfinished**. CPU-backed AY/AYM, SNDH,
+other tracker families, structural music finder, subsong UI, AYL/PLS/CUE and tray
+integration remain required work in the [coverage record](IMPLEMENTATION.md).
+This candidate does not implement or certify them. Python and Pascal are
+verification tools, not playback dependencies.
 
-Requires a **64-bit** C++20 compiler, CMake 3.24+, Ninja and Qt 6.8+ with Quick,
-QuickControls2, Multimedia, Concurrent, Network and Widgets. Qt 6.11.2 and GCC
-16.2 have been tested locally. Regression checks also need Python 3 and NumPy.
+## Measured audio fidelity
+
+C++Ay compares its native PCM with independently produced AY_Emul audio.
+The original supplied direct export passes the fixed complete-interval contract;
+additional synthetic source-reference cases support the scope listed above.
+There is no fitted gain, offset, resampling or omitted tail.
+
+<!-- fidelity-table:start -->
+| Fixture / profile | PCM | Frames (seconds) | Unequal samples | Max error (LSB) | Worst window relative / SNR | Verdict |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| Flexo02 | 48000 Hz / 16-bit / 2 ch | 2,457,879 (51.2058125) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
+| native-ts.pt3 | 48000 Hz / 16-bit / 2 ch | 30,723 (0.6400625) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
+| AY-48k | 48000 Hz / 16-bit / 2 ch | 2,457,879 (51.2058125) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
+| YM-averager | 48000 Hz / 16-bit / 2 ch | 2,457,879 (51.2058125) | 0 | 0 | 0 / ∞ (zero error) | **BIT_EXACT_PCM** |
+<!-- fidelity-table:end -->
+
+**BIT_EXACT_PCM** means identical intended format/frame count and every decoded
+sample equal. **NEAR_MATCH_TARGET_MET** requires relative RMS error ≤ 1e-6
+(SNR ≥ 120 dB) and maximum error ≤ one LSB for each channel, whole track and
+all required windows. The [fixed criteria and provenance](docs/FIDELITY.md)
+explain silence, traces, window coverage and the narrowly qualified WAV-header
+quirk. These are engineering thresholds, not a perceptual accuracy percentage.
+
+The profile is source-default YM2149F, 1,773,400 Hz, 50 Hz, ABC stereo,
+preamp 127 and 49-tap FIR; the Pascal reference uses AY_Emul **3.0 beta source**.
+The original export executable's version and architecture are unknown. Its
+profile is inferred from source defaults and qualified against the complete
+export, not inferred from its WAV header. Tested source/build identity and UTC
+measurement date are in the [generated summary](docs/fidelity/summary.json).
+Offline PCM results do not certify an OS mixer, audio device or DAC.
+
+<img src="docs/images/fidelity.png" alt="Measured independent TurboSound reference and C++Ay PCM overview, sample detail and exact-zero signed residual" width="1000">
+
+Public synthetic example, **entire 0.6400625-second interval, gain 1**:
+[AY_Emul reference WAV](docs/fidelity/listening/native-ts.pt3/reference.wav) ·
+[C++Ay WAV](docs/fidelity/listening/native-ts.pt3/candidate.wav) ·
+[detailed measurements](docs/fidelity/listening/native-ts.pt3/report.json) ·
+[offline A/B report](docs/fidelity/listening/index.html).
+The supplied real music is private; only its numerical results/hashes are public.
+[All measured rows and profile cases](docs/fidelity/summary.md).
+
+To listen locally with reliable WAV seeking:
 
 ```sh
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install -r requirements-dev.txt
+python3 tools/serve_evidence.py --directory docs/fidelity/listening
+# Open http://127.0.0.1:8080/index.html
+```
+
+## Install or build
+
+**0.1.0-rc.1 is prepared locally; no public download has been published.**
+Candidate artifacts and checksums are described in the
+[release notes](docs/RELEASE_NOTES.md). Linux is the primary target.
+
+The Linux x86-64 `.tar.gz` is a dynamically linked **system-Qt** package.
+Extract it and run `bin/C++Ay`; install compatible runtime packages listed in
+its `INSTALL.txt` / `PACKAGE.json`. The prepared binary targets the tested
+CachyOS/Arch runtime (Qt 6.11.2, matching GCC/glibc), not arbitrary Linux
+installations. Building from source is the appropriate route on other systems.
+
+Windows: extract the **whole** `C++Ay-0.1.0-rc.1-windows-x64.zip` and run
+`C++Ay.exe`, keeping DLLs/QML/plugins beside it. Qt/MinGW runtimes and notices
+are included. MinGW binaries are verified under Wine; physical Windows 11 x64
+hardware remains untested. No macOS qualification is claimed.
+
+Source requirements: a 64-bit C++20 compiler, **CMake 3.24+**, Ninja,
+**Qt 6.8+** Core, Quick, QuickControls2, Multimedia, Concurrent, Network and
+Widgets, including QML Controls/Layouts and a platform/audio backend.
+Locally tested: GCC 16.2.1, Qt 6.11.2. Release uses GCC `-O3 -DNDEBUG`.
+Tests/evidence require Python 3, NumPy and Matplotlib.
+
+CachyOS/Arch build dependencies:
+
+```sh
+sudo pacman -S --needed base-devel cmake ninja qt6-base qt6-declarative qt6-multimedia python-numpy python-matplotlib
+# Optional KDE native file chooser integration:
+sudo pacman -S --needed plasma-integration
 cmake --preset linux-release
 cmake --build --preset linux-release --parallel
-ctest --preset linux-release
+ctest --preset linux-release --no-tests=error
 ./build/C++Ay
 ```
 
-If Qt is installed outside the system search path, supply
-`-DCMAKE_PREFIX_PATH=/path/to/Qt/gcc_64` when configuring.
-[Build options and installation](docs/BUILDING.md).
+For other distributions, install their corresponding Qt development packages;
+[build details](docs/BUILDING.md) include non-system Qt, core-only builds,
+installation and pinned Windows cross-compilation. CI declares Ubuntu 24.04
+with an official Qt SDK; the workflow has not yet run on GitHub.
 
-## Windows x64
+## First use
 
-For a portable build, extract the **entire** `C++Ay-windows-x64.zip` package and
-run `C++Ay.exe`. Keep its DLLs, plugins and QML directories beside the executable.
-No separate Qt or MinGW installation is needed on the destination machine.
+**Add…** opens the native multi-file chooser; **Folder…** recursively imports
+modules. Double-click a playlist entry, drag the timeline to seek, and open
+**Mixer…** to choose chip/output settings. **Export WAV…** always starts from
+reset using that profile. Existing files are never overwritten; batch export
+chooses unused suffixed names. **List tools** reorders/loads/clears the playlist
+and exports it. Drop module files into the player to add them.
 
-Cross-compile on Linux with:
-
-```sh
-./tools/build_windows.sh
-```
-
-The script downloads pinned Qt 6.11.2 and matching MinGW GCC 13.1 archives into
-`.deps/`, builds the application and creates
-`build-windows/C++Ay-windows-x64.zip`. The bootstrap is tested on CachyOS/Arch
-x86-64 and needs native Linux Qt 6.11.2 host tools. See
-[Windows build requirements](docs/BUILDING.md#windows-cross-compilation).
-
-The Windows binaries have passed PCM, export and UI checks under Wine. Physical
-Windows hardware has not yet been tested. Qt 6.11 targets Windows 11 x64.
-Build outputs belong in release assets, not Git history.
-
-## Using the player
-
-Use **Add…** for the native file chooser; Ctrl+A selects all files. **Folder…**
-imports a folder and its subfolders. Double-click a playlist row to play it.
-**List tools** provides reordering, playlist load/save/clear and export actions.
-
-Drag the timeline cursor or position slider to seek. WAV export always renders
-from the beginning with the selected mixer profile, independently of playback
-position and playback volume. The volume slider uses a logarithmic perceptual
-scale, with 0% muted and 100% at unity gain. Existing destinations are never overwritten.
-
-| Key | Action |
+| Shortcut | Action |
 | --- | --- |
 | L | Add music |
 | X | Play |
 | C | Pause/resume |
 | V | Stop |
-| Z / B | Previous / next track |
+| Z / B | Previous / next |
 | G | Mixer |
-| Delete | Remove selected playlist entry |
+| Delete | Remove selected entry |
 
-The session is restored when launching without a file argument. A playing song
-resumes; a paused song remains paused. Atomic checkpoints protect the last
-complete snapshot after a crash; an unexpected shutdown can lose roughly ten
-seconds of progress. Explicit file arguments take precedence over automatic
-resume. Session storage retains legacy internal Qt IDs for compatibility.
-
-Rendering defaults to Qt Quick's software backend to avoid unnecessary GPU and
-video initialization overhead. [Memory investigation](docs/MEMORY.md).
-
-## Command-line tools
+Headless examples (PSG/trace options follow the output filename):
 
 ```sh
-./build/aytool inspect /path/to/song.pt3
-./build/aytool render /path/to/song.pt3 /path/to/new-output.wav
-./build/aytool trace /path/to/song.pt3 /path/to/new-events.jsonl
-./build/aytool psg /path/to/song.pt3 /path/to/new-output.psg
+./build/aytool --version
+./build/aytool inspect tests/fixtures/native-ts.pt3
+./build/aytool render tests/fixtures/native-ts.pt3 /tmp/cppay-example.wav
+./build/aytool trace tests/fixtures/native-ts.pt3 /tmp/cppay-events.jsonl
+./build/aytool psg tests/fixtures/native-ts.pt3 /tmp/cppay-example.psg
 ```
 
-Render options include `--ay`, `--no-filter`, `--rate N`, `--clock N`,
-`--interrupt N`, `--preamp N`, `--max-seconds N` and `--memory-mib N`.
-The default qualified profile is YM2149F, 1,773,400 Hz, 50 Hz interrupts,
-preamp 127 and the source's 49-tap FIR. Playback uses bounded streaming buffers;
-full WAV exports temporarily hold the rendered PCM.
+Options: `--ay`, `--no-filter`, `--rate N`, `--clock N`, `--interrupt N`,
+`--preamp N`, `--max-seconds N`, `--memory-mib N`. Defaults bound full exports
+to ten minutes / 256 MiB; live playback uses bounded streaming queues. CLI
+outputs refuse overwrites. `inspect` currently performs a full render.
 
-## Development and licensing
+Session storage retains the legacy IDs to preserve existing user settings:
+Linux `$XDG_DATA_HOME/AyPlayer/AyPlayer/session.json` (default
+`~/.local/share/AyPlayer/AyPlayer/session.json`), settings
+`~/.config/AyPlayer/AyPlayer.conf`; Windows Qt standard application data/settings
+under `AyPlayer`. File arguments override automatic playback restoration.
 
-The public tests contain synthetic inputs and immutable expected PCM/events from
-an independent AY_Emul source adapter. They need no private music or reference
-SDK. [Test details](docs/TESTING.md), [contribution guide](CONTRIBUTING.md),
-[release procedure](docs/RELEASING.md).
+If startup reports a missing QML module/platform plugin, install the matching
+Qt Quick runtime/style and Wayland/XCB plugin. If playback reports no audio
+device or unsupported rate, check your sound server and select a supported
+rate in Mixer. `QT_QUICK_BACKEND` can override the default software scene graph;
+[measured memory behavior](docs/MEMORY.md) explains that choice.
 
-Original C++Ay contributions and supplied branding are licensed under
-[MIT](LICENSE). AY_Emul-derived routines, tables and reference adapters retain
-upstream attribution and terms; Qt and bundled runtimes have their own licenses.
-See [THIRD_PARTY.md](THIRD_PARTY.md) and
-[the original AY_Emul notice](reference/AY_EMUL_NOTICE.txt).
-The privately supplied Flexo02 music/WAV pair and reference archives are not
-included in the public repository or release packages.
+## Reproduce the measurements
+
+A build/test pass and a fidelity pass are separate gates:
+
+```sh
+python3 tools/release_fidelity.py --renderer build/aytool --output build/public-fidelity
+# Full required gate: original private pair must be supplied at manifest paths.
+python3 tools/release_fidelity.py --renderer build/aytool --output build/required-fidelity --private
+```
+
+Use a fresh output directory. Required missing data fails with
+`BLOCKED_MISSING_REFERENCE`; ordinary public tests never advertise the private
+gate as passed. Output includes manifest/checksums, per-channel/window JSON,
+readable table, real plots, WAV/residual audio, offline HTML and an evidence
+archive. Private archives must stay local. See [full recipe](docs/FIDELITY.md)
+and [tests](docs/TESTING.md) for independent Pascal qualification, sanitizer and
+installed-GUI verification. Committed expectations are never generated by C++Ay.
+
+Live playback, GUI export and `aytool` share the production `aycore` renderer:
+load module → timed ordered registers → AY/YM chip state → source mixing/filter
+and interpolation → stereo PCM. QtAudio sends it to the selected default device;
+playback volume is separate from canonical export/comparison PCM.
+
+## Status and credits
+
+The focused candidate's verified formats are listed above; full original scope
+is still open. Linux tests ran on CachyOS/KDE Wayland with an available audio
+output. Wine is a compatibility test, not physical Windows validation. Broader
+DPI/accessibility, hardware/device and real-world format coverage remain limited.
+
+Report issues with the candidate version, OS/Qt/audio backend, format/profile,
+reproduction steps and logs. Attach music only when you have permission to share
+it. There is no public issue tracker until a repository destination is established.
+[Release notes and handoff](docs/RELEASE_NOTES.md) ·
+[publication instructions](docs/RELEASING.md) · [contributing](CONTRIBUTING.md).
+
+Original project contributions and branding: **MIT**, [LICENSE](LICENSE).
+AY_Emul-derived routines/tables retain **Sergey Bulba's original terms and
+attribution**; they are not relicensed by MIT. Thanks to Sergey Bulba,
+Hacker KAY and the credited tracker/table contributors, including V_Soft.
+[Component notices](THIRD_PARTY.md) · [original AY_Emul notice](reference/AY_EMUL_NOTICE.txt).
+Qt and distributed runtime components retain their own licenses/notices.

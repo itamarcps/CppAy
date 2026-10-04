@@ -10,7 +10,7 @@ verified; CI installs Qt 6.11.2 with aqtinstall on Ubuntu 24.04.
 ```sh
 cmake --preset linux-release
 cmake --build --preset linux-release --parallel
-ctest --preset linux-release
+ctest --preset linux-release --no-tests=error
 ./build/C++Ay
 ```
 
@@ -23,7 +23,7 @@ The core/CLI can build without Qt:
 ```sh
 cmake -S . -B build-cli -G Ninja -DCMAKE_BUILD_TYPE=Release -DAYPLAYER_GUI=OFF
 cmake --build build-cli --parallel
-ctest --test-dir build-cli --output-on-failure
+ctest --test-dir build-cli --output-on-failure --no-tests=error
 ```
 
 `AYPLAYER_SANITIZERS=ON` enables ASan/UBSan with GCC/Clang.
@@ -90,3 +90,36 @@ This runs independent fixtures, optional private golden checks, Unicode paths,
 overwrite refusal, playback/seek/export, rapid transitions and three/six-channel
 layouts. An isolated Wine prefix lives under `.deps/`. Physical Windows device
 validation remains outstanding. Qt 6.11 targets Windows 11 x64.
+
+
+## Prepared Linux binary archive
+
+```sh
+python3 tools/package_linux.py --build-dir build --output build/packages
+```
+
+Use a fresh package output directory. This packages the installed executable,
+CLI, desktop/icon/MIME resources and project notices. Its Qt QML-import scanner
+checks system modules/plugins; ELF dependency and required symbol-version records
+are retained in `PACKAGE.json`. Application QML/branding is embedded. Safe
+`$ORIGIN` relative runtime paths are retained; absolute development RPATHs are
+rejected. No host/Qt libraries are copied.
+
+This is the declared **system-runtime model**, not a self-contained Qt bundle.
+The prepared CachyOS package requires compatible CachyOS/Arch Qt 6.11.2,
+GCC runtime/glibc, QML styles, platform plugins and audio backend packages.
+Font/theme/translation resources come from those system packages. Building on
+an older distribution yields that distribution's corresponding dependency model;
+the current binary is not advertised as universally portable.
+
+The exact archive was extracted in `/tmp`, launched outside source/build folders
+with Qt/QML/LD development overrides removed and fresh XDG settings, exercised
+on KDE Wayland with real QtAudio output, and its GUI WAV re-compared against the
+original direct export. This verifies the declared host-runtime scenario, not a
+fresh machine without dependencies. See [candidate results](RELEASE_NOTES.md).
+
+Qt provides [QML deployment helpers](https://doc.qt.io/qt-6.8/qt-generate-deploy-qml-app-script.html)
+for runtime-bundling models. This archive deliberately depends on system Qt;
+Windows uses the existing cross-host import/DLL deployment tool with complete
+runtime notices. A suppressed unsupported-platform deployment call is not used
+to claim a complete bundle.

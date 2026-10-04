@@ -1,0 +1,67 @@
+{
+  "fixture": "native-ts.pt3",
+  "redistribution": "original synthetic inputs under project MIT; derived expected outputs retain AY_Emul notice",
+  "reference_identity": {
+    "rate_hz": 48000,
+    "channels": 2,
+    "bits": 16,
+    "frames": 30723,
+    "encoding": "signed_integer",
+    "channel_order": "L,R",
+    "sha256": "46e544f41fe9c34356304adf0113c373c4a32225083f9aa6c3d7e116d8fb26d6",
+    "riff_oversize_bytes": 0
+  },
+  "candidate_identity": {
+    "renderer_sha256": "a3c3726c1acef1378343380969e76239cb564364c7cc22e28e4c689092e53eb9",
+    "renderer_version": "C++Ay 0.1.0-rc.1",
+    "source_revision": "4dc0dbda530da4af9ac4c6593b0defbfa7673267",
+    "working_tree_diff_sha256": "a08821cd49445771790d8af501daef64d5e24b1da36810f5c6cbedc49e018e32",
+    "build_configuration": "Release; shared production aycore",
+    "cmake_cache_sha256": "ddee293fa1529f5820b48dc4c680f7ed9da57ef3f2138908007a6ddc4b96a6ae",
+    "CMAKE_BUILD_TYPE:STRING": "Release",
+    "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
+    "compiler_version": "c++ (GCC) 16.2.1 20260810",
+    "qt_version": "6.11.2"
+  },
+  "input": {
+    "path": "tests/fixtures/native-ts.pt3",
+    "sha256": "729ad5c096454451822c7e250b3e1d63998087dea5a882d368a9be59f8c6397d",
+    "size": 321
+  },
+  "interval": "entire 30,723-frame track",
+  "profile": {
+    "chip_model": "YM2149F",
+    "chip_count": "module metadata: one or PT3.7 TurboSound two",
+    "master_clock_hz": 1773400,
+    "interrupt_hz": 50,
+    "subsong": 0,
+    "rate_hz": 48000,
+    "bits": 16,
+    "channels": 2,
+    "channel_order": [
+      "L",
+      "R"
+    ],
+    "gains_AL_AR_BL_BR_CL_CR": [
+      255,
+      13,
+      170,
+      170,
+      13,
+      255
+    ],
+    "preamp": 127,
+    "beeper_gain": 146,
+    "dma_gain": 146,
+    "beeper_dma_active": false,
+    "filter": "source 49-tap FIR, 24 fractional coefficient bits",
+    "filter_quality": 1,
+    "coefficient_routine_utf8_sha256": "509290fa06148b97149de0cd3a6479878aa71497cea4227fe799a61c3438f941",
+    "counter_ticks_per_interrupt": 4434,
+    "pcm_step_16_16": 302660,
+    "initial_state": "reset decoder, chip/noise/envelope, FIR history and interpolation phase",
+    "end_policy": "first natural end, no FIR tail flush",
+    "settings_origin": "source defaults, golden-qualified against original direct export; model/clock/gains/filter inferred together, not derived from WAV header",
+    "later_settings_screenshots": "User confirmed screenshots were taken later; retain golden-qualified profile"
+  }
+}

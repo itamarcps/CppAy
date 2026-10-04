@@ -12,7 +12,7 @@ ctest --preset linux-release
 A fresh checkout runs eight checks without local music, Pascal, reference
 archives or downloaded SDKs. Controller/session checks do not require an audio
 device; the session check additionally verifies audible resume when one exists.
-Allow about fifteen seconds for the actual ten-second checkpoint/forced-kill
+Allow about sixteen seconds for the actual ten-second checkpoint/forced-kill
 restart check. Generated files go into the build directory.
 
 - `core_behavior`: deterministic/concurrent rendering, odd/single-frame streaming,
@@ -67,7 +67,7 @@ again with `-DAYPLAYER_GOLDEN_TESTS=OFF` for a public-checkout-only build.
 ## Desktop and Windows checks
 
 On an actual desktop, the player has diagnostic `--smoke-test`,
-`--layout-smoke-test` and `--stream-smoke-test` modes. Run them in a fresh working
+`--layout-smoke-test`, `--window-smoke-test` and `--stream-smoke-test` modes. Run them in a fresh working
 folder; outputs are written under `evidence/` there. Inputs must include a track
 longer than 25 seconds and a TurboSound fixture for all checks. The public
 `tests/fixtures/integration.pt3` and `tests/fixtures/native-ts.pt3` work.
@@ -76,6 +76,7 @@ longer than 25 seconds and a TurboSound fixture for all checks. The public
 mkdir -p build/manual-review
 cd build/manual-review
 ../C++Ay --layout-smoke-test ../../tests/fixtures/integration.pt3 ../../tests/fixtures/native-ts.pt3
+../C++Ay --window-smoke-test
 ```
 
 The full transport smoke exercises an audio device, cursor dragging, compact
@@ -84,9 +85,40 @@ output files, so remove only your prior generated `evidence/gui-export.wav`
 before repeating it. Use isolated XDG configuration/data paths for manual
 checks if you do not want to change your regular player session.
 
+The custom-window check clicks maximize/restore, double-clicks the title area,
+minimizes and closes the actual window. It also validates all eight resize
+handles and their full-window placement. On Wayland, Qt may report Windowed
+again after the compositor accepts minimization; the check observes the
+minimized-state transition. Movement and resizing use Qt's native system
+operations and need real pointer input for compositor-driven geometry checks.
+
 `tools/build_windows.sh --verify` additionally checks the deployed MinGW binaries
 under an isolated Wine prefix. It uses the private golden pair when present,
 otherwise the public integration fixture and a Windows CLI-render consistency
 reference; the twelve independent fixtures are always checked. Wine's audio
 endpoint GUID workaround is confined to that test prefix. A Wine pass does not
 replace physical Windows device testing.
+
+
+## Release evidence and device transport
+
+`device_transport_behavior` exercises the actual Qt audio sink: EOF advances
+exactly once, final EOF stops, pause/resume/stop and whole-song repeat remain on
+the correct track. It returns CTest skip code 77 if no device is available;
+that is not device certification. The locally prepared candidate executed it.
+
+The comparator has sixteen independently calculable/negative tests, including
+threshold boundaries, a corrupted right channel, quiet/final windows, inserted
+and dropped frames, full-range arithmetic, invalid inputs and ordered-event
+conflicts. Required missing fixtures fail rather than skip.
+
+```sh
+python3 tools/release_fidelity.py --renderer build/aytool --output build/public-fidelity
+python3 tools/release_fidelity.py --renderer build/aytool --output build/required-fidelity --private
+```
+
+See [criteria, provenance and artifacts](FIDELITY.md). For an installed renderer,
+pass `--build-dir build` to record the original Release compiler/Qt/flags and
+assert that the installed executable matches that build. A public-only pass
+is separate from the required private gate. CI runs the public gate and preserves
+its reports; GitHub execution has not occurred yet.
