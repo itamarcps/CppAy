@@ -84,6 +84,8 @@ int main(int argc, char **argv) {
     REQUIRE(controller.position() == 13.25);
     controller.exportWav(QUrl::fromLocalFile(output));
     REQUIRE(controller.error().contains("already exists"));
+    REQUIRE(exports == 3 && lastExport.contains("already exists"));
+    REQUIRE(read(output).mid(44) == reference);
     controller.clearError();
     auto playlist = temporary.filePath("list.m3u8");
     controller.savePlaylist(QUrl::fromLocalFile(playlist));
@@ -101,7 +103,7 @@ int main(int argc, char **argv) {
     REQUIRE(QDir().mkpath(batch));
     controller.seek(7);
     controller.exportPlaylistWav(QUrl::fromLocalFile(batch));
-    waitFor([&] { return exports == 3; });
+    waitFor([&] { return exports == 4; });
     REQUIRE(lastExport.isEmpty());
     REQUIRE(controller.position() == 7);
     REQUIRE(read(QDir(batch).filePath(QFileInfo(QString::fromLocal8Bit(argv[1])).completeBaseName()+".wav")).mid(44) ==

@@ -12,9 +12,9 @@ BEGIN
   BLOCK "040904b0"
   BEGIN
    VALUE "FileDescription", "C++Ay\0"
-   VALUE "FileVersion", "0.1.0\0"
+   VALUE "FileVersion", "0.1.0-rc.1\0"
    VALUE "ProductName", "C++Ay\0"
-   VALUE "ProductVersion", "0.1.0\0"
+   VALUE "ProductVersion", "0.1.0-rc.1\0"
    VALUE "OriginalFilename", "C++Ay.exe\0"
   END
  END

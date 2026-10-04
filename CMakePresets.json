@@ -50,6 +50,9 @@
       "configurePreset": "linux-release",
       "output": {
         "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
       }
     },
     {
@@ -57,6 +60,9 @@
       "configurePreset": "core-debug",
       "output": {
         "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
       }
     }
   ]

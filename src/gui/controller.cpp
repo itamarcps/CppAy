@@ -726,6 +726,7 @@ void Controller::exportWav(const QUrl &url) {
   if (QFileInfo::exists(destination)) {
     m_error = "Export destination already exists. Choose a new filename.";
     emit changed();
+    emit exported(m_error);
     return;
   }
   auto job = std::make_shared<Job>();

@@ -13,6 +13,10 @@ std::filesystem::path argumentPath(const char *text) {
 
 int run(int argc, char **argv) {
   try {
+    if (argc == 2 && std::string(argv[1]) == "--version") {
+      std::cout << "C++Ay " << CPPAY_VERSION << "\n";
+      return 0;
+    }
     if (argc < 3) {
       std::cerr << "Usage: aytool inspect FILE | render FILE OUTPUT.wav | psg "
                    "FILE OUTPUT.psg | trace FILE OUTPUT.jsonl [--ay "
@@ -70,6 +74,9 @@ int run(int argc, char **argv) {
         f << "{\"tick\":" << e.tick << ",\"ordinal\":" << e.ordinal
           << ",\"chip\":" << int(e.chip) << ",\"register\":" << int(e.reg)
           << ",\"value\":" << int(e.value) << "}\n";
+      f.flush();
+      if (!f)
+        throw std::runtime_error("Trace write failed");
     }
     std::cout << r.song.format << " v" << r.song.version << ": " << r.song.title
               << " by " << r.song.author << "\n"

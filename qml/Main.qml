@@ -5,10 +5,17 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: window
     visible: true
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
     width: 1060; height: 680
     minimumWidth: 760; minimumHeight: 520
     title: player.title === "C++Ay" ? "C++Ay" : player.title + " — C++Ay"
     color: "#292e35"
+    background: Rectangle {
+        color: "#292e35"
+        border.color: window.active ? "#697582" : "#444c56"
+        border.width: window.visibility === Window.Maximized ? 0 : 1
+    }
+    WindowResizeHandles { targetWindow: window }
     font.family: Qt.platform.os === "windows" ? "Segoe UI" : "Noto Sans"
     font.pixelSize: 12
     palette.window: "#343a42"
@@ -58,15 +65,17 @@ ApplicationWindow {
         }
         Overlay.modal: Rectangle { color: Qt.rgba(0,0,0,.55) }
     }
-    menuBar: MenuBar {
-        implicitHeight: 26
-        background: Rectangle {
-            gradient: Gradient { GradientStop { position: 0; color: "#545c67" } GradientStop { position: 1; color: "#353c45" } }
-            Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#181d23" }
-        }
+    header: WindowTitleBar {
+        id: titleBar
+        targetWindow: window
+        MenuBar {
+        objectName: "windowMenuBar"
+        parent: titleBar.menuHost
+        width: implicitWidth; height: parent.height
+        background: null
         delegate: MenuBarItem {
             id: menuButton
-            implicitHeight: 25; leftPadding: 12; rightPadding: 12
+            implicitHeight: 34; leftPadding: 10; rightPadding: 10
             contentItem: Label { text: menuButton.text; color: "#e7eaed"; font: menuButton.font; verticalAlignment: Text.AlignVCenter }
             background: Rectangle { color: menuButton.highlighted ? "#74603f" : "transparent"; border.color: menuButton.highlighted ? "#b2955c" : "transparent" }
         }
@@ -95,6 +104,7 @@ ApplicationWindow {
             title: "Tools"
             Action { text: "Mixer & emulation…"; shortcut: "G"; onTriggered: mixer.open() }
             Action { text: "About C++Ay"; onTriggered: about.open() }
+        }
         }
     }
     Shortcut { sequence: "Left"; enabled: !mixer.visible; onActivated: player.seek(player.position-5) }
@@ -450,6 +460,6 @@ ApplicationWindow {
 
     SkinDialog {
         id: about; title: "About C++Ay"; anchors.centerIn: parent; modal: true; standardButtons: Dialog.Close; width: 480
-        Label { width: parent.width; wrapMode: Text.Wrap; text: "C++Ay · native C++20 / Qt Quick\n\nPT3, PSG and YM3 decoding and AY/YM rendering ported from Sergey Bulba’s AY_Emul source. Chip amplitude tables credited to Hacker KAY.\n\nThe supplied Flexo02 fixture renders bit-exact. Full AY_Emul format and application parity is still in progress." }
+        Label { width: parent.width; wrapMode: Text.Wrap; text: "C++Ay " + Qt.application.version + " · native C++20 / Qt Quick\n\nPT3, PSG and YM3 decoding and AY/YM rendering ported from Sergey Bulba’s AY_Emul source. Chip amplitude tables credited to Hacker KAY.\n\nThe supplied Flexo02 fixture renders bit-exact. Full AY_Emul format and application parity is still in progress." }
     }
 }

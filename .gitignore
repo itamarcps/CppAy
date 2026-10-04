@@ -39,9 +39,13 @@ __pycache__/
 !/docs/BUILDING.md
 !/docs/RELEASING.md
 !/docs/MEMORY.md
+!/docs/FIDELITY.md
+!/docs/RELEASE_NOTES.md
+!/docs/fidelity/
 !/docs/images/
 /docs/images/*
 !/docs/images/player.png
+!/docs/images/fidelity.png
 /reference/*
 !/reference/README.md
 !/reference/AY_EMUL_NOTICE.txt

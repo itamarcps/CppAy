@@ -27,7 +27,7 @@ jobs:
           sudo apt-get install -y ninja-build python3-numpy
       - run: cmake --preset core-debug
       - run: cmake --build --preset core-debug --parallel 2
-      - run: ctest --preset core-debug --output-junit core-tests.xml
+      - run: ctest --preset core-debug --no-tests=error --output-junit core-tests.xml
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
         with:
@@ -62,14 +62,26 @@ jobs:
           echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
       - run: cmake --preset linux-release
       - run: cmake --build --preset linux-release --parallel 2
-      - run: ctest --preset linux-release --output-junit desktop-tests.xml
+      - run: ctest --preset linux-release --no-tests=error --output-junit desktop-tests.xml
       - name: Three/six-channel layouts
         run: |
           mkdir -p build/ci-review
           cd build/ci-review
           ../C++Ay --layout-smoke-test ../../tests/fixtures/integration.pt3 ../../tests/fixtures/native-ts.pt3
-      - name: Check install tree
-        run: cmake --install build --prefix "$GITHUB_WORKSPACE/build/install"
+          ../C++Ay --window-smoke-test
+      - name: Public independent fidelity (required; no private music)
+        run: python tools/release_fidelity.py --renderer build/aytool --output build/public-fidelity
+      - name: Build Linux system-runtime package
+        run: python tools/package_linux.py --build-dir build --output build/packages
+      - name: Extracted package startup and export
+        run: |
+          mkdir -p "$RUNNER_TEMP/cppay-package"
+          tar -xf build/packages/C++Ay-*-linux-x86_64.tar.gz -C "$RUNNER_TEMP/cppay-package"
+          installed=$(find "$RUNNER_TEMP/cppay-package" -name C++Ay -type f)
+          cd "$RUNNER_TEMP/cppay-package"
+          "$installed" --window-smoke-test
+          "$(dirname "$installed")/aytool" render "$GITHUB_WORKSPACE/tests/fixtures/integration.pt3" package-export.wav
+          cmp package-export.wav "$GITHUB_WORKSPACE/build/integration-reference.wav"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: always()
         with:
@@ -77,5 +89,7 @@ jobs:
           path: |
             desktop-tests.xml
             build/ci-review/evidence/
+            build/public-fidelity/
+            build/packages/*.tar.gz
           if-no-files-found: ignore
           retention-days: 14

@@ -42,14 +42,24 @@ int main(int argc, char **argv) {
     qputenv("QT_FFMPEG_ENCODING_HW_DEVICE_TYPES", ",");
 #endif
   QApplication app(argc, argv);
+  app.setApplicationVersion(CPPAY_VERSION);
   auto args = app.arguments();
+  if (args.contains("--version")) {
+    fprintf(stdout, "C++Ay %s\n", CPPAY_VERSION);
+    return 0;
+  }
   bool memorySmoke = args.contains("--memory-smoke-test");
+  bool windowSmoke = args.contains("--window-smoke-test");
   bool layoutSmoke = args.contains("--layout-smoke-test");
   bool streamSmoke = args.contains("--stream-smoke-test");
   bool playlistSmoke = args.contains("--playlist-smoke-test");
   bool dialogSmoke = args.contains("--dialog-smoke-test");
   bool smoke = args.contains("--smoke-test") || playlistSmoke || dialogSmoke ||
-               streamSmoke || layoutSmoke || memorySmoke;
+               streamSmoke || layoutSmoke || memorySmoke || windowSmoke;
+  if (smoke && !QDir().mkpath("evidence")) {
+    fprintf(stderr, "Cannot create smoke-test evidence directory\n");
+    return 1;
+  }
   app.setOrganizationName(smoke ? "AyPlayerTests" : "AyPlayer");
   // Keep the existing storage IDs so the rename preserves sessions/settings.
   app.setApplicationName("AyPlayer");
@@ -166,7 +176,7 @@ int main(int argc, char **argv) {
         auto rect = [](QQuickItem *item) { return item->mapRectToScene(QRectF(0,0,item->width(),item->height())); };
         auto *deck = window->findChild<QQuickItem *>("playerDeck");
         auto *playlist = window->findChild<QQuickItem *>("playlistPanel");
-        for (const auto &name : {"positionDisplay", "scopeGrid", "timeline", "volumeControls", "transportControls", "playlistView", "playlistToolsBar", "statusStrip"}) {
+        for (const auto &name : {"windowTitleBar", "windowMenuBar", "windowDragArea", "windowMinimizeButton", "windowMaximizeButton", "windowCloseButton", "positionDisplay", "scopeGrid", "timeline", "volumeControls", "transportControls", "playlistView", "playlistToolsBar", "statusStrip"}) {
           auto *item = window->findChild<QQuickItem *>(name);
           if (!item) { failures->append(QString("Missing item: ")+name); continue; }
           auto box = rect(item);
@@ -210,7 +220,87 @@ int main(int argc, char **argv) {
   }
   bool audioStarted = false, positionAdvanced = false,
        mouseSeekVerified = false, importWhilePlaying = false, mixerVerified = false, listToolsVerified = false;
-  if (smoke && !playlistSmoke && !dialogSmoke && !streamSmoke && !layoutSmoke && !memorySmoke) {
+  if (windowSmoke) {
+    app.setQuitOnLastWindowClosed(false);
+    auto failures = std::make_shared<QJsonArray>();
+    auto step = std::make_shared<int>(0);
+    auto clock = std::make_shared<ulong>(1000);
+    auto minimized = std::make_shared<bool>(false);
+    QObject::connect(window,&QWindow::windowStateChanged,&app,[minimized](Qt::WindowState state) {
+      if (state==Qt::WindowMinimized) *minimized=true;
+    });
+    auto timer = new QTimer(&app);
+    timer->setInterval(250);
+    const QSize initialSize = window->size();
+    auto click = [window,clock](QQuickItem *item, bool twice=false) {
+      if (!item) return;
+      auto point = item->mapToScene(QPointF(item->width()/2,item->height()/2));
+      auto global = window->mapToGlobal(point.toPoint());
+      for (int i=0; i<(twice?2:1); ++i) {
+        QMouseEvent press(QEvent::MouseButtonPress,
+                         point,global,Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+        QMouseEvent release(QEvent::MouseButtonRelease,point,global,Qt::LeftButton,Qt::NoButton,Qt::NoModifier);
+        press.setTimestamp(*clock); release.setTimestamp(*clock+20); *clock+=60;
+        QCoreApplication::sendEvent(window,&press); QCoreApplication::sendEvent(window,&release);
+      }
+    };
+    QObject::connect(timer,&QTimer::timeout,&app,[&,timer,step,failures,click,initialSize,minimized] {
+      auto *maximize = window->findChild<QQuickItem *>("windowMaximizeButton");
+      auto *frame = window->findChild<QQuickItem *>("windowResizeHandles");
+      auto check = [&](bool condition, const QString &message) { if (!condition) failures->append(message); };
+      switch ((*step)++) {
+      case 0: {
+        check(window->flags().testFlag(Qt::FramelessWindowHint),"Native title bar still enabled");
+        check(frame && frame->isVisible(),"Missing window resize handles");
+        std::function<int(QQuickItem *)> countHandles = [&](QQuickItem *item) {
+          int count = item->objectName().startsWith("windowResize") && item->objectName()!="windowResizeHandles" ? 1 : 0;
+          for (auto *child:item->childItems()) count+=countHandles(child);
+          return count;
+        };
+        check(frame && countHandles(frame)==8,"Missing resize edges/corners");
+        if(frame) check(frame->mapToScene(QPointF())==QPointF() && frame->size()==QSizeF(window->size()),"Resize handles do not cover the whole window");
+        click(maximize); break;
+      }
+      case 1:
+        check(window->visibility()==QWindow::Maximized,"Maximize button failed");
+        check(frame && !frame->isVisible(),"Resize grips visible while maximized");
+        check(maximize && maximize->property("text").toString()=="Restore","Maximize button did not become Restore");
+        click(maximize); break;
+      case 2:
+        check(window->visibility()==QWindow::Windowed && window->size()==initialSize,"Restore button did not restore normal geometry");
+        click(window->findChild<QQuickItem *>("windowDragArea"),true); break;
+      case 3:
+        check(window->visibility()==QWindow::Maximized,"Title-bar double-click failed");
+        click(maximize); break;
+      case 4:
+        check(window->visibility()==QWindow::Windowed,"Normal state not restored");
+        *minimized=false;
+        click(window->findChild<QQuickItem *>("windowMinimizeButton")); break;
+      case 5:
+        // Wayland has no minimized configure flag; the compositor may report
+        // Windowed immediately after accepting the native minimize request.
+        check(*minimized,"Minimize button did not request the minimized state");
+        window->showNormal(); break;
+      case 6:
+        check(window->visibility()==QWindow::Windowed,"Window did not restore after minimizing");
+        window->grabWindow().save("evidence/custom-window.png");
+        click(window->findChild<QQuickItem *>("windowCloseButton")); break;
+      default: {
+        check(!window->isVisible(),"Close button failed");
+        QFile report("evidence/window-controls.json");
+        if(report.open(QIODevice::WriteOnly)) report.write(QJsonDocument(QJsonObject{
+          {"status",failures->isEmpty()?"PASS":"FAIL"},{"failures",*failures},
+          {"checks",QJsonArray{"frameless","eight resize handles","maximize/restore",
+              "double-click","minimize","close"}},
+          {"all_checks_passed",failures->isEmpty()}}).toJson());
+        timer->stop(); app.exit(failures->isEmpty()?0:1); break;
+      }
+      }
+    });
+    timer->start();
+    QTimer::singleShot(10000,&app,[]{QCoreApplication::exit(3);});
+  }
+  if (smoke && !playlistSmoke && !dialogSmoke && !streamSmoke && !layoutSmoke && !memorySmoke && !windowSmoke) {
     QObject::connect(&player, &Controller::imported, &app, [&](int count) {
       if (count > 1 && player.playing())
         importWhilePlaying = true;
@@ -339,7 +429,9 @@ int main(int argc, char **argv) {
                     .toJson());
           player.stop();
           app.exit(error.isEmpty() && audioStarted && positionAdvanced &&
-                           mouseSeekVerified && mixerVerified && listToolsVerified
+                           mouseSeekVerified && mixerVerified && listToolsVerified &&
+                           (qEnvironmentVariableIsEmpty("AYPLAYER_SMOKE_IMPORT") || importWhilePlaying) &&
+                           player.underruns() == 0
                        ? 0
                        : 1);
         });

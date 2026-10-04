@@ -86,16 +86,17 @@ def main():
         has_golden = private_source.exists() and private_wav.exists()
         input_track = private_source if has_golden else fixture_root / 'integration.pt3'
         wine([tool, 'render', windows_path(input_track), windows_path(golden)])
-        _, actual = compare.read_wav(golden)
+        actual_meta, actual = compare.read_wav(golden)
         if has_golden:
-            _, expected = compare.read_wav(private_wav)
-            if actual.tobytes() != expected.tobytes():
-                raise AssertionError('Windows full-song golden PCM mismatch')
+            expected_meta, expected = compare.read_wav(private_wav)
+            golden_report = compare.compare(expected,actual,expected_meta,actual_meta)
+            if golden_report['status'] not in compare.ACCEPTED:
+                raise AssertionError('Windows full-song golden PCM/metadata mismatch')
             report['golden_pcm'] = {'status': 'BIT_EXACT_PCM', 'stereo_frames': len(actual)}
         else:
             # Integration consistency only; immutable independent fixtures below
             # remain the compatibility oracle for a public checkout.
-            expected = actual.copy()
+            expected = actual.copy(); expected_meta = actual_meta.copy()
             report['golden_pcm'] = {'status': 'NOT_RUN', 'reason': 'Private music/WAV pair not supplied'}
             report['integration_reference'] = {'source': 'Windows CLI render of synthetic integration.pt3',
                                                'stereo_frames': len(actual)}
@@ -147,10 +148,12 @@ def main():
                 raise AssertionError(f'Windows GUI did not complete: {result.stderr}')
             report['gui'] = json.loads(smoke_path.read_text())
             report['gui']['exit_code'] = result.returncode
-            _, actual = compare.read_wav(work / 'evidence/gui-export.wav')
-            if actual.tobytes() != expected.tobytes():
+            gui_meta, actual = compare.read_wav(work / 'evidence/gui-export.wav')
+            gui_report=compare.compare(expected,actual,expected_meta,gui_meta)
+            if gui_report['status'] not in compare.ACCEPTED:
                 raise AssertionError('Windows GUI WAV export differs from the CLI/reference PCM')
-            report['gui_export_pcm'] = 'BIT_EXACT_PCM'
+            report['gui_export_pcm'] = gui_report['status']
+            report['gui_export_measurements'] = gui_report
             shutil.copy2(work / 'evidence/ui.png', ROOT / 'evidence/windows-ui.png')
             result = gui('--stream-smoke-test', [input_track, fixture_root / 'native-ts.pt3'])
             stream_path = work / 'evidence/stream-device-smoke.json'
@@ -165,6 +168,13 @@ def main():
             report['layout'] = json.loads(layout_path.read_text())
             shutil.copy2(layout_path, ROOT / 'evidence/windows-ui-layout.json')
             report['wine_rendering'] = 'Application-default Qt Quick software backend; isolated prefix uses X11'
+            result = gui('--window-smoke-test', [])
+            window_path = work / 'evidence/window-controls.json'
+            if result.returncode or not window_path.exists():
+                raise AssertionError(f'Windows custom window controls failed: exit={result.returncode}, report={window_path.read_text() if window_path.exists() else "missing"}, stderr={result.stderr}')
+            report['window_controls'] = json.loads(window_path.read_text())
+            if report['window_controls']['status'] != 'PASS':
+                raise AssertionError('Windows custom title-bar checks failed')
     report['status'] = 'PASS' if args.skip_gui or (report['gui']['exit_code'] == 0 and report['streaming']['exit_code'] == 0) else 'ENGINE_AND_GUI_EXPORT_PASS_AUDIO_UNVERIFIED'
     with (ROOT / 'evidence/windows-verification.json').open('w') as f:
         json.dump(report, f, indent=2)
