@@ -9,12 +9,16 @@ cmake --build --preset linux-release --parallel
 ctest --preset linux-release
 ```
 
-A fresh checkout runs eight checks without local music, Pascal, reference
+A fresh checkout runs eleven checks, including optional device transport, without local music, Pascal, reference
 archives or downloaded SDKs. Controller/session checks do not require an audio
 device; the session check additionally verifies audible resume when one exists.
 Allow about sixteen seconds for the actual ten-second checkpoint/forced-kill
 restart check. Generated files go into the build directory.
 
+- `legacy_format_behavior`: independently generated PT2/STC PCM and ordered
+  events, lossless PT3 conversion, profile variations, invalid inputs and no overwrite.
+- `legacy_streaming_behavior`: odd chunk sizes, checkpoint copies, independent
+  instances and pre-pan voice taps for both formats.
 - `core_behavior`: deterministic/concurrent rendering, odd/single-frame streaming,
   checkpoints, bounds, cancellation, profile validation and silence.
 - `comparator_behavior`: WAV parsing and PCM/event comparison behavior.

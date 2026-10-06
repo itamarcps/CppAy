@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "legacy.h"
 #include <fstream>
 #include <iostream>
 namespace {
@@ -19,11 +20,20 @@ int run(int argc, char **argv) {
     }
     if (argc < 3) {
       std::cerr << "Usage: aytool inspect FILE | render FILE OUTPUT.wav | psg "
-                   "FILE OUTPUT.psg | trace FILE OUTPUT.jsonl [--ay "
+                   "FILE OUTPUT.psg | convert-pt3 FILE OUTPUT.pt3 | trace FILE "
+                   "OUTPUT.jsonl [--ay "
                    "--no-filter --rate N --clock N --interrupt N --preamp N]\n";
       return 2;
     }
     std::string command = argv[1];
+    if (command == "convert-pt3") {
+      if (argc != 4)
+        throw std::runtime_error(
+            "Usage: aytool convert-pt3 INPUT.pt2|INPUT.stc OUTPUT.pt3");
+      ay::convertToPt3(argumentPath(argv[2]), argumentPath(argv[3]));
+      std::cout << "Converted to PT3: " << argv[3] << "\n";
+      return 0;
+    }
     ay::Profile p;
     int start = command == "inspect" ? 3 : 4;
     for (int i = start; i < argc; ++i) {
@@ -58,8 +68,8 @@ int run(int argc, char **argv) {
       throw std::runtime_error("Unknown command");
     if (command != "inspect" && argc < 4)
       throw std::runtime_error("Missing output path");
-    auto r =
-        ay::renderFile(argumentPath(argv[2]), p, {}, command == "trace" || command == "psg");
+    auto r = ay::renderFile(argumentPath(argv[2]), p, {},
+                            command == "trace" || command == "psg");
     if (command == "psg")
       ay::writePsg(argumentPath(argv[3]), r);
     if (command == "render")

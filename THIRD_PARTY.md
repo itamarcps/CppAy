@@ -2,7 +2,7 @@
 
 ## AY_Emul source and ported routines
 
-PT3 player behavior, note/volume tables, AY/YM synthesis, mixer and FIR are ported
+PT2/PT3 and STC player behavior, note/volume tables, AY/YM synthesis, mixer and FIR are ported
 from **Sergey Vladimirovich Bulba's AY_Emul 3.0 beta** source.
 Copyright (c) 1999–2024 S.V. Bulba.
 

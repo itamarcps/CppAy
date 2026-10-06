@@ -6,4 +6,4 @@ Exec=C++Ay %F
 Icon=cppay
 Terminal=false
 Categories=AudioVideo;Audio;Player;
-MimeType=audio/x-pt3;audio/x-psg;audio/x-ym3;
+MimeType=audio/x-pt3;audio/x-pt2;audio/x-stc;audio/x-psg;audio/x-ym3;

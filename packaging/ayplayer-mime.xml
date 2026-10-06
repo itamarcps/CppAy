@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
  <mime-type type="audio/x-pt3"><comment>ProTracker 3 module</comment><glob pattern="*.pt3"/></mime-type>
+ <mime-type type="audio/x-pt2"><comment>ProTracker 2 module</comment><glob pattern="*.pt2"/></mime-type>
+ <mime-type type="audio/x-stc"><comment>Sound Tracker compiled module</comment><glob pattern="*.stc"/></mime-type>
  <mime-type type="audio/x-psg"><comment>AY register log</comment><glob pattern="*.psg"/></mime-type>
  <mime-type type="audio/x-ym3"><comment>YM register log</comment><glob pattern="*.ym"/></mime-type>
 </mime-info>

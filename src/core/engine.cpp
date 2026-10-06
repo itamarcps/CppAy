@@ -1,9 +1,11 @@
 // AY synthesis/mixer/FIR ported from Sergey Bulba AY_Emul AY.pas and
 // MainWin.pas.
 #include "engine.h"
+#include "legacy.h"
 #include "logs.h"
 #include "pt3.h"
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <fstream>
 #include <limits>
@@ -34,6 +36,32 @@ void commitExport(const std::filesystem::path &temporary,
 #endif
 }
 } // namespace
+
+void writeModuleFile(const std::filesystem::path &path,
+                     const std::vector<uint8_t> &bytes) {
+  if (std::filesystem::exists(path))
+    throw std::runtime_error("Module destination already exists");
+  auto temporary = path;
+  temporary += ".ayplayer-part";
+  if (std::filesystem::exists(temporary))
+    throw std::runtime_error("Temporary export already exists");
+  try {
+    std::ofstream f(temporary, std::ios::binary);
+    if (!f)
+      throw std::runtime_error("Cannot create module export");
+    f.write(reinterpret_cast<const char *>(bytes.data()), bytes.size());
+    f.flush();
+    if (!f)
+      throw std::runtime_error("Module write failed");
+    f.close();
+    if (!f)
+      throw std::runtime_error("Module close failed");
+    commitExport(temporary, path);
+  } catch (...) {
+    std::filesystem::remove(temporary);
+    throw;
+  }
+}
 
 void Profile::validate() const {
   if (!std::isfinite(maxSeconds) || maxSeconds <= 0 || maxSeconds > 86400 ||
@@ -304,6 +332,7 @@ struct StreamRenderer::Impl {
   Profile profile;
   Song song;
   std::unique_ptr<Pt3> player, second;
+  std::unique_ptr<Legacy> legacy;
   std::shared_ptr<const LogDecoder> log;
   std::unique_ptr<Synth> synth;
   uint64_t interrupt = 0, framePosition = 0, frames = 0;
@@ -321,6 +350,9 @@ struct StreamRenderer::Impl {
         data[4] == 10 && data[5] && profile.useFileTiming)
       profile.interruptHz = data[5];
     profile.validate();
+    auto extension = path.extension().string();
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
     bool pt3 = data.size() >= 10 &&
                (std::string(data.begin(), data.begin() + 10) == "ProTracker" ||
                 std::string(data.begin(), data.begin() + 6) == "Vortex");
@@ -338,6 +370,13 @@ struct StreamRenderer::Impl {
         player->allowPatternLoop = second->allowPatternLoop = true;
         song.format = "PT3.7 TurboSound";
       }
+    } else if (extension == ".pt2" || extension == ".stc") {
+      legacy = std::make_unique<Legacy>(data, extension == ".stc");
+      song = legacy->song;
+      song.interrupts = legacy->duration(
+          uint64_t(profile.interruptHz * profile.maxSeconds) + 1);
+      if (song.title.empty())
+        song.title = path.stem().string();
     } else {
       log = std::make_shared<LogDecoder>(data, path.stem().string());
       song = log->song;
@@ -357,6 +396,8 @@ struct StreamRenderer::Impl {
         frames(other.frames), ticks(other.ticks), chipCount(other.chipCount),
         trace(other.trace), capture(other.capture), pending(other.pending),
         offset(other.offset) {
+    if (other.legacy)
+      legacy = std::make_unique<Legacy>(*other.legacy);
     if (other.player)
       player = std::make_unique<Pt3>(*other.player);
     if (other.second)
@@ -389,6 +430,10 @@ struct StreamRenderer::Impl {
       apply(player->writes, 0);
       if (second)
         apply(second->writes, 1);
+    } else if (legacy) {
+      if (!legacy->frame())
+        throw std::runtime_error("Tracker ended before duration scan");
+      apply(legacy->writes, 0);
     } else
       apply(log->frames[interrupt], 0);
     synth->ticks(ticks, pending.pcm, capture ? &pending.voices : nullptr);

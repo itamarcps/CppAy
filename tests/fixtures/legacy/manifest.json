@@ -1,0 +1,43 @@
+{
+  "reference": "Unchanged PT2/STC Players.pas routines and shared AY_Emul 3.0 beta chip/filter via tools/build_legacy_oracle.py",
+  "source_sha256": "7397e55f76f1c2141044548b618359e9c73fcb07d852c02b950651c6a5fa7546",
+  "redistribution": "Original synthetic modules: MIT; AY_Emul-derived reference outputs retain reference/AY_EMUL_NOTICE.txt",
+  "fixtures": [
+    {
+      "input": "effects.pt2",
+      "pcm": "effects.pt2.pcm",
+      "events": "effects.pt2.jsonl",
+      "sha256": {
+        "effects.pt2": "3763c3fd90a7237eee6aa8312a274a1a2b81f846dec24244e0d297acc244a64d",
+        "effects.pt2.pcm": "59b272d2b288b31bd07d2ef2210f1a48a6d93ab915811514568bbf065c69c7b5",
+        "effects.pt2.jsonl": "a1962e21a52e55cdef551608fcc33fee226e6e4c28c7d2a9e104177b1fe2ae30"
+      },
+      "frames": 31683
+    },
+    {
+      "input": "loops.stc",
+      "pcm": "loops.stc.pcm",
+      "events": "loops.stc.jsonl",
+      "sha256": {
+        "loops.stc": "47f3f58951c1c8f3ff6b7c5d62d8626dadd9d2d35c30515a09bc1760ccde5891",
+        "loops.stc.pcm": "df35305d226d5e972e86ca53777ee10ac63f752506f6f232fb9af7a18c2977fe",
+        "loops.stc.jsonl": "291c37996f690976d9d84ff7e9a0b411a2912113a0e3bc96a9e35ceb25d8d40c"
+      },
+      "frames": 86409
+    }
+  ],
+  "reference_compiler": "Free Pascal 3.2.2, Linux x86-64",
+  "reference_adapter_sha256": "65807eae169066407440705c3a1e929404b5dcde2e7f2546b2c4cc06558af5fd",
+  "profile_manifest": "../fidelity-manifest.json",
+  "profile_version": "bulba-3.0-source-default-v1",
+  "pcm_format": {
+    "sample_rate_hz": 48000,
+    "precision_bits": 16,
+    "channels": 2,
+    "channel_order": [
+      "L",
+      "R"
+    ],
+    "encoding": "signed little-endian integer"
+  }
+}

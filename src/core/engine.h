@@ -62,6 +62,8 @@ using Progress = std::function<bool(double)>;
 Render renderFile(const std::filesystem::path &, const Profile & = {},
                   Progress = {}, bool trace = false);
 void writePsg(const std::filesystem::path &, const Render &);
+void writeModuleFile(const std::filesystem::path &,
+                     const std::vector<uint8_t> &);
 void writeWav(const std::filesystem::path &, const Render &);
 std::vector<uint8_t> readFile(const std::filesystem::path &);
 } // namespace ay

@@ -460,6 +460,6 @@ ApplicationWindow {
 
     SkinDialog {
         id: about; title: "About C++Ay"; anchors.centerIn: parent; modal: true; standardButtons: Dialog.Close; width: 480
-        Label { width: parent.width; wrapMode: Text.Wrap; text: "C++Ay " + Qt.application.version + " · native C++20 / Qt Quick\n\nPT3, PSG and YM3 decoding and AY/YM rendering ported from Sergey Bulba’s AY_Emul source. Chip amplitude tables credited to Hacker KAY.\n\nThe supplied Flexo02 fixture renders bit-exact. Full AY_Emul format and application parity is still in progress." }
+        Label { width: parent.width; wrapMode: Text.Wrap; text: "C++Ay " + Qt.application.version + " · native C++20 / Qt Quick\n\nPT2, PT3, STC, PSG and YM3 decoding and AY/YM rendering ported from Sergey Bulba’s AY_Emul source. Chip amplitude tables credited to Hacker KAY.\n\nIndependent audio measurements and supported formats are documented in the project repository." }
     }
 }

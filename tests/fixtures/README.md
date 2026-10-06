@@ -14,3 +14,9 @@ checks engine integration consistency, not independent compatibility.
 
 All input modules are synthetic. The expected outputs retain source-oracle
 attribution described in `THIRD_PARTY.md`.
+
+`legacy/` contains original synthetic PT2 and STC modules and immutable
+AY_Emul-derived PCM/register-event references. Its manifest records hashes and
+provenance. Normal tests never regenerate them. The STC case covers looping and
+finite samples, envelope triggers, ornaments and position transposition; PT2
+covers tempo/skip changes, volume/noise, glissando and portamento.

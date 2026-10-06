@@ -335,7 +335,7 @@ void Controller::startImport() {
     QSet<QString> seen;
     for (const auto &folder : folders) {
       QDirIterator it(folder,
-                      {"*.pt3", "*.PT3", "*.psg", "*.PSG", "*.ym", "*.YM"},
+                      {"*.pt3", "*.PT3", "*.pt2", "*.PT2", "*.stc", "*.STC", "*.psg", "*.PSG", "*.ym", "*.YM"},
                       QDir::Files, QDirIterator::Subdirectories);
       while (it.hasNext()) {
         if (job->cancel.load())
@@ -432,7 +432,7 @@ void Controller::browse(const QString &purpose) {
     dialog->setWindowTitle("Add music to playlist");
     dialog->setFileMode(QFileDialog::ExistingFiles);
     dialog->setNameFilters(
-        {"AY modules / logs (*.pt3 *.PT3 *.psg *.PSG *.ym *.YM)",
+        {"AY modules / logs (*.pt3 *.PT3 *.pt2 *.PT2 *.stc *.STC *.psg *.PSG *.ym *.YM)",
          "Playlists (*.m3u *.m3u8)", "All files (*)"});
   } else if (purpose == "folder" || purpose == "batch") {
     dialog->setWindowTitle(purpose == "folder"

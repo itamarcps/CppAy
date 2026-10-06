@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Native PT2 and STC playback, metadata, folder import and file associations.
+- `aytool convert-pt3` for PT2/STC, with register-state validation, repeated
+  pattern compression and safe destination handling.
+- Independent reference fixtures and conversion/streaming regression tests.
+
+
 ## 0.1.0 — 2026-10-04
 
 First public release.

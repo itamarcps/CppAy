@@ -10,7 +10,10 @@ player to native streaming playback, compact playlists and independent channel s
 
 ## Play, collect and convert
 
-- **PT3, PT3.7 TurboSound, PSG and YM3/YM3b** with embedded titles and durations.
+PT2/STC playback and PT3 conversion are available in source builds from `main`.
+The published **0.1.0** binaries predate these additions.
+
+- **PT2, PT3, PT3.7 TurboSound, STC, PSG and YM3/YM3b** with embedded titles and durations.
 - Streaming playback, pause/resume, seek, previous/next and whole-song repeat;
   three or six triggered voice scopes and stereo meters.
 - Native multi-file chooser (including Ctrl+A), recursive folder import, drag/drop,
@@ -25,6 +28,8 @@ player to native streaming playback, compact playlists and independent channel s
 
 | Format | Implemented support | Independent evidence / limits |
 | --- | --- | --- |
+| PT2 | Native ProTracker 2 decoder | Independent synthetic PCM/events; selected real modules |
+| STC | Native Sound Tracker compiled decoder | Independent synthetic PCM/events; sample loops, transposition and envelopes |
 | PT3 | Native decoder, source version tables/effects | Original direct-export pair; selected synthetic effects and header/table cases |
 | PT3.7 TurboSound | Two chips, six voices | Synthetic PCM and ordered register events |
 | PSG | Versions 0–10, file timing and explicit override | Synthetic register/noise/envelope/skip cases; other variants rejected |
@@ -159,9 +164,18 @@ Headless examples (PSG/trace options follow the output filename):
 ./build/aytool render tests/fixtures/native-ts.pt3 /tmp/cppay-example.wav
 ./build/aytool trace tests/fixtures/native-ts.pt3 /tmp/cppay-events.jsonl
 ./build/aytool psg tests/fixtures/native-ts.pt3 /tmp/cppay-example.psg
+./build/aytool convert-pt3 song.pt2 song.pt3
+./build/aytool convert-pt3 song.stc song.pt3
 ```
 
-Options: `--ay`, `--no-filter`, `--rate N`, `--clock N`, `--interrupt N`,
+`convert-pt3` creates a standard PT3.6 module, retaining the complete first-play PCM. It compiles playback into PT3 sample banks and reused
+patterns; original editable tracker structure and loop-position metadata are
+not preserved. Conversion validates every interrupt before writing and refuses
+existing destinations. Songs exceeding PT3's 64 KiB, 31 sample-bank or
+pattern/position limits fail without a partial output. Conversion is bounded to
+300,000 interrupts to limit memory use.
+
+Options for rendering: `--ay`, `--no-filter`, `--rate N`, `--clock N`, `--interrupt N`,
 `--preamp N`, `--max-seconds N`, `--memory-mib N`. Defaults bound full exports
 to ten minutes / 256 MiB; live playback uses bounded streaming queues. CLI
 outputs refuse overwrites. `inspect` currently performs a full render.

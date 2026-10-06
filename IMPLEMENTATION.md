@@ -5,12 +5,13 @@ WAV export. This is a focused AY/YM player; additional AY_Emul formats and tools
 
 | Area | Implemented | Remaining |
 | --- | --- | --- |
+| PT2/STC | Native compiled-module decoding; PT3 CLI conversion with per-interrupt validation | Relocated memory images; PT3 conversion size limits and original editable structures |
 | PT3 | Native decoding, note/volume tables, tested effects and PT3.7 TurboSound | Broader real-world corpus validation |
 | Logs | PSG versions 0–10, timing override precedence, YM3/YM3b | Other PSG variants and YM4–YM6 |
 | Chip/output | AY/YM amplitude models, source mixer/filter/interpolation, qualified stereo PCM | Other chip/clock modes and full upstream timing matrix |
 | Playback | Background streaming, pause/stop/seek, bounded checkpoints, three/six real voice taps | Subsong selection, device chooser, format loop points |
 | Playlist | Embedded titles, duration, bulk native chooser, recursive folders, reorder, M3U, remove/clear | AYL, shuffle and richer folder inclusion modes |
-| Export | Fresh-from-start WAV, cancellation, no overwrite, batch WAV, PSG/event CLI output | Broader conversion tools and optional adapters |
+| Export | Fresh-from-start WAV, cancellation, no overwrite, batch WAV, PT2/STC-to-PT3 and PSG/event CLI output | Broader conversion tools and optional adapters |
 | UI | Compact retro desktop layout, grouped mixer, clipped independently triggered scopes | Broader DPI/accessibility/platform checks |
 | Persistence | Atomic session checkpoints every ten seconds and on clean exit; crash/resume checks | Tray and shutdown integration beyond normal Qt lifecycle |
 | Platforms | Linux x86-64 and MinGW Windows x64 builds; Wine qualification | Physical Windows hardware validation |
@@ -34,7 +35,7 @@ qualifies that fixture/profile, not all upstream functionality. The original
 export executable version and architecture are unknown. The music pair stays
 local and is tested only when explicitly enabled.
 
-Public independent checks validate twelve synthetic source-oracle PCM/event
+Public independent checks validate fourteen synthetic source-oracle PCM/event
 fixtures with immutable hashes. Integration checks exercise canonical streaming,
 seek, independent/silent channels, scope triggering, bulk metadata import,
 controller export and real ten-second crash checkpoints. See
@@ -50,7 +51,7 @@ ZX50, PSG2/BK and standalone AS0 conversion are outside the current scope.
 
 ## Audio architecture
 
-The loader (`pt3.cpp`/`logs.cpp`) produces ordered register events using integer
+The loader (`pt3.cpp`/`legacy.cpp`/`logs.cpp`) produces ordered register events using integer
 interrupt timing. `engine.cpp` implements AY/YM chip state, gain tables,
 FIR/averager filtering, interpolation and signed stereo 16-bit PCM.
 `StreamRenderer` supplies live `PlaybackSession` and `renderFile`, shared by

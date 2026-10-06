@@ -43,10 +43,11 @@
   },
   "public_corpus": {
     "manifest": "tests/fixtures/manifest.json",
-    "identity": "twelve original synthetic modules/logs and immutable independently generated raw stereo PCM/events",
+    "identity": "twelve core synthetic modules/logs plus two PT2/STC modules with immutable independently generated PCM/events",
     "provenance": "reference/oracle/provenance.json; reviewable observer.patch",
     "reference_version": "AY_Emul 3.0 beta source (1999–2024), minimal Pascal adapter; not original export executable",
-    "redistribution": "original synthetic inputs under project MIT; derived expected outputs retain AY_Emul notice"
+    "redistribution": "original synthetic inputs under project MIT; derived expected outputs retain AY_Emul notice",
+    "legacy_manifest": "tests/fixtures/legacy/manifest.json"
   },
   "required_private": {
     "identity": "Flexo02 PT3/direct AY_Emul WAV reference pair",

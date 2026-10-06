@@ -205,6 +205,15 @@ def main():
             ref=out/('reference-'+name+'.wav');wrap_raw(raw,ref)
             measure(name,ROOT/'tests/fixtures'/name,ref,events=ROOT/'tests/fixtures'/(name+'.reference.jsonl'))
             ref.unlink()
+        legacy_root=ROOT/'tests/fixtures/legacy'
+        legacy_manifest=json.loads((legacy_root/'manifest.json').read_text())
+        for case in legacy_manifest['fixtures']:
+            for name,sha in case['sha256'].items():
+                if digest(legacy_root/name)!=sha:raise ValueError('Immutable legacy fixture differs: '+name)
+            name='legacy-'+case['input']
+            ref=out/('reference-'+name+'.wav');wrap_raw(legacy_root/case['pcm'],ref)
+            measure(name,legacy_root/case['input'],ref,events=legacy_root/case['events'])
+            ref.unlink()
         if args.private:
             entry=manifest['required_private']
             try:source=check_file(entry['input']);ref=check_file(entry['reference'])

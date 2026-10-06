@@ -1,4 +1,5 @@
 #include "playlistmodel.h"
+#include "legacy.h"
 #include "pt3.h"
 #include <QFile>
 #include <QFileInfo>
@@ -110,6 +111,24 @@ PlaylistEntry PlaylistModel::readMetadata(const QString &path,
       ay::Pt3 player(std::vector<uint8_t>(bytes.begin(), bytes.end()));
       auto interrupts = ay::pt3Duration(player, turbo);
       e.seconds = interrupts / profile.interruptHz;
+    } catch (const std::exception &error) {
+      e.metadataError = QString::fromUtf8(error.what());
+    }
+  } else if (e.format == "PT2" || e.format == "STC") {
+    if (file.size() > 65536) {
+      e.metadataError = "Tracker module exceeds 64 KiB";
+      return e;
+    }
+    file.seek(0);
+    auto bytes = file.readAll();
+    try {
+      ay::Legacy player(std::vector<uint8_t>(bytes.begin(), bytes.end()),
+                        e.format == "STC");
+      if (!player.song.title.empty())
+        e.title = QString::fromLocal8Bit(player.song.title.c_str()).trimmed();
+      e.seconds = player.duration(
+                      uint64_t(profile.interruptHz * profile.maxSeconds) + 1) /
+                  profile.interruptHz;
     } catch (const std::exception &error) {
       e.metadataError = QString::fromUtf8(error.what());
     }
