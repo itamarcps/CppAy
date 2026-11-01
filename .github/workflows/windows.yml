@@ -30,7 +30,7 @@ jobs:
           echo "LD_LIBRARY_PATH=$RUNNER_TEMP/Qt/6.11.2/gcc_64/lib" >> "$GITHUB_ENV"
           echo "$RUNNER_TEMP/Qt/6.11.2/gcc_64/bin" >> "$GITHUB_PATH"
       - run: ./tools/build_windows.sh
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: CppAy-windows-x64
           path: build-windows/C++Ay-windows-x64.zip
